@@ -712,7 +712,7 @@ html.site-entry-loading body > :not(#surpriseLoader) {
 
 
 /* First-visit welcome gate */
-html.visitor-gate-active body > :not(#visitorGate):not(#surpriseLoader) {
+html.visitor-gate-active body > :not(#visitorGate):not(#surpriseLoader):not(#siteAuthOverlay) {
     visibility: hidden !important;
 }
 html.visitor-gate-active #visitorGate {
