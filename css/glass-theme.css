@@ -586,3 +586,44 @@ body {
     .countdown-unit { padding: 11px 2px; }
     .countdown-unit span { font-size: 8px; }
 }
+
+
+/* Transparent glass finish — subtle, clear and lightweight */
+.site-nav,
+.countdown-card,
+.photo-card,
+.moment,
+.message-card,
+.letter-card,
+.unlock-hint {
+    background: rgba(255, 255, 255, 0.055) !important;
+    border: 1px solid rgba(210, 225, 255, 0.20) !important;
+    box-shadow:
+        0 10px 32px rgba(0, 0, 0, 0.16),
+        inset 0 1px 0 rgba(255, 255, 255, 0.13) !important;
+}
+
+/* Keep the glass see-through while limiting blur for smoother scrolling */
+.site-nav,
+.countdown-card,
+.photo-card,
+.moment,
+.message-card,
+.letter-card,
+.unlock-hint {
+    -webkit-backdrop-filter: blur(7px) saturate(120%) !important;
+    backdrop-filter: blur(7px) saturate(120%) !important;
+}
+
+/* Slightly clearer glass on small screens */
+@media (max-width: 650px) {
+    .site-nav,
+    .countdown-card,
+    .photo-card,
+    .moment,
+    .message-card,
+    .letter-card {
+        -webkit-backdrop-filter: blur(5px) saturate(115%) !important;
+        backdrop-filter: blur(5px) saturate(115%) !important;
+    }
+}
