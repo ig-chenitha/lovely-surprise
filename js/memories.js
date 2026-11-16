@@ -51,13 +51,13 @@ function closeLightbox() {
   lightbox.setAttribute("aria-hidden","true");
   document.body.style.overflow = "";
 }
+const originalPhotos = Array.from(gallery.querySelectorAll(".photo-card")).map(card => ({
+  url: card.querySelector("img")?.getAttribute("src"),
+  caption: card.querySelector("h2")?.textContent || "",
+  label: card.querySelector("span")?.textContent || "MEMORY"
+})).filter(x => x.url);
 function renderGallery(uploaded) {
-  const originals = Array.from(gallery.querySelectorAll(".photo-card")).map(card => ({
-    url: card.querySelector("img")?.getAttribute("src"),
-    caption: card.querySelector("h2")?.textContent || "",
-    label: card.querySelector("span")?.textContent || "MEMORY"
-  })).filter(x => x.url);
-  allPhotos = [...uploaded.map(x => ({...x, label:"NEW MEMORY"})), ...originals];
+  allPhotos = [...uploaded.map(x => ({...x, label:"NEW MEMORY"})), ...originalPhotos];
   gallery.innerHTML = "";
   allPhotos.forEach((photo, index) => {
     const card = document.createElement("article");
