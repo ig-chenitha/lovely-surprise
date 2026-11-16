@@ -871,3 +871,9 @@ body::after {
 /* Prevent page flash before the shared sign-in overlay loads */
 html.site-auth-active body > :not(#siteAuthOverlay) { visibility: hidden !important; }
 html.site-auth-active #siteAuthOverlay { visibility: visible !important; }
+
+.site-profile-avatar{background-size:cover;background-position:center;overflow:hidden}
+.site-auth-card #siteChooseAvatar{margin:8px auto 12px;max-width:230px}
+.site-profile-chip{display:inline-flex!important;align-items:center;gap:8px;white-space:nowrap}
+.site-profile-chip-photo{width:27px;height:27px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.5)}
+.site-profile-chip span{display:inline-block}
