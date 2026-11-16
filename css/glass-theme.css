@@ -867,3 +867,7 @@ body::after {
 .site-profile-avatar{width:76px;height:76px;margin:20px auto 12px;display:grid;place-items:center;border-radius:50%;background:linear-gradient(135deg,#e4edff,#879fe0);color:#101a35;font-size:32px;font-weight:700}
 .site-profile-chip{margin-left:auto;padding:9px 14px;border-radius:999px;border:1px solid rgba(205,222,255,.25);background:rgba(255,255,255,.08);color:#e8efff;cursor:pointer}
 @media(max-width:600px){.site-auth-card{padding:28px 20px}.site-profile-chip{font-size:11px;padding:7px 10px}}
+
+/* Prevent page flash before the shared sign-in overlay loads */
+html.site-auth-active body > :not(#siteAuthOverlay) { visibility: hidden !important; }
+html.site-auth-active #siteAuthOverlay { visibility: visible !important; }
