@@ -494,3 +494,32 @@ body {
     border: 1px solid rgba(190, 207, 255, .2);
     border-radius: 14px;
 }
+
+/* Gentle floating hearts — limited particle count for performance */
+.love-particles {
+    position: fixed;
+    inset: 0;
+    z-index: 2;
+    overflow: hidden;
+    pointer-events: none;
+}
+.love-particle {
+    position: absolute;
+    bottom: -35px;
+    color: rgba(164, 190, 255, .78);
+    text-shadow: 0 0 12px rgba(110, 145, 255, .55);
+    animation: loveFloat linear forwards;
+    will-change: transform, opacity;
+}
+@keyframes loveFloat {
+    0% { transform: translate3d(0, 0, 0) rotate(0deg); opacity: 0; }
+    12% { opacity: .8; }
+    85% { opacity: .55; }
+    100% { transform: translate3d(var(--drift), -110vh, 0) rotate(35deg); opacity: 0; }
+}
+.photo-card img { loading: lazy; }
+.lightbox { -webkit-backdrop-filter: none; backdrop-filter: none; }
+.lightbox:focus { outline: none; }
+@media (prefers-reduced-motion: reduce) {
+    .love-particles { display: none; }
+}
