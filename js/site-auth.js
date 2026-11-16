@@ -2,8 +2,13 @@
 "use strict";
 const URL="https://qenobhmetbarxepggocx.supabase.co", KEY="sb_publishable_U3jXC6vggzC_bqHJxmAoEA_riJcQh29";
 const ALLOWED=["chenithakodithuwakku000@gmail.com","raveenagunawardhana2007@gmail.com"];
-const client=window.supabase.createClient(URL,KEY);
 const root=document.documentElement;
+if (!window.supabase || typeof window.supabase.createClient !== "function") {
+  console.error("Lovely Surprise login: Supabase library did not load.");
+  root.classList.remove("site-auth-active");
+  return;
+}
+const client=window.supabase.createClient(URL,KEY);
 root.classList.add("site-auth-active");
 const style=document.createElement("style");
 style.textContent="html.site-auth-active body>*:not(#siteAuthOverlay){visibility:hidden!important}#siteAuthOverlay{visibility:visible!important}";
