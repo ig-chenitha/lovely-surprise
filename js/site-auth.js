@@ -3,12 +3,8 @@
 const URL="https://qenobhmetbarxepggocx.supabase.co", KEY="sb_publishable_U3jXC6vggzC_bqHJxmAoEA_riJcQh29";
 const ALLOWED=["chenithakodithuwakku000@gmail.com","raveenagunawardhana2007@gmail.com"];
 const root=document.documentElement;
-if (!window.supabase || typeof window.supabase.createClient !== "function") {
-  console.error("Lovely Surprise login: Supabase library did not load.");
-  root.classList.remove("site-auth-active");
-  return;
-}
-const client=window.supabase.createClient(URL,KEY);
+let client = (window.supabase && typeof window.supabase.createClient === "function")
+  ? window.supabase.createClient(URL,KEY) : null;
 root.classList.add("site-auth-active");
 const style=document.createElement("style");
 style.textContent="html.site-auth-active body>*:not(#siteAuthOverlay){visibility:hidden!important}#siteAuthOverlay{visibility:visible!important}";
@@ -95,6 +91,7 @@ $("siteCreate").addEventListener("click",()=>{
 $("siteAuthForm").addEventListener("submit",async e=>{
  e.preventDefault();const email=$("siteEmail").value.trim().toLowerCase(),password=$("sitePassword").value;
  if(!ALLOWED.includes(email)){status("Only Chenitha and Raveena's approved email accounts can access this website.");return;}
+ if(!client){status("Connecting securely... Please try again in a moment.");return;}
  $("siteAuthSubmit").disabled=true;status(mode==="signup"?"Creating your profile...":"Signing in...");
  let result;
  if(mode==="signup"){
@@ -111,8 +108,24 @@ $("siteEnter").addEventListener("click",async()=>{
  const {data}=await client.auth.getUser();if(data.user)enter(data.user);
 });
 $("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();mode="login";showForm();status("You have been logged out.");});
-client.auth.getSession().then(({data})=>{
- if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))showProfile(data.session.user);
- else if(data.session)client.auth.signOut();
-});
+function startAuth(){
+ if(!client){status("Unable to connect securely. Please refresh this page.");return;}
+ client.auth.getSession().then(({data})=>{
+  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))showProfile(data.session.user);
+  else if(data.session)client.auth.signOut();
+ });
+}
+if(client){startAuth();}
+else{
+ const loader=document.createElement("script");
+ loader.src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
+ loader.onload=()=>{
+  if(window.supabase&&typeof window.supabase.createClient==="function"){
+   client=window.supabase.createClient(URL,KEY);
+   startAuth();
+  }else{status("Secure login could not start. Please refresh.");}
+ };
+ loader.onerror=()=>status("Secure login service did not load. Check your connection and refresh.");
+ document.head.append(loader);
+}
 })();
