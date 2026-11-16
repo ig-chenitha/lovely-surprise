@@ -230,3 +230,111 @@ body {
         transition: none !important;
     }
 }
+
+
+/* ==========================================
+   PREMIUM FINISH — SHARED ACROSS ALL PAGES
+========================================== */
+
+.ambient {
+    position: fixed;
+    width: min(38vw, 440px);
+    height: min(38vw, 440px);
+    border-radius: 50%;
+    filter: blur(110px);
+    opacity: .16;
+    pointer-events: none;
+    z-index: 0;
+    animation: ambientFloat 18s ease-in-out infinite alternate;
+}
+
+.ambient-one {
+    background: #426dff;
+    top: 8%;
+    left: -170px;
+}
+
+.ambient-two {
+    background: #8a55ff;
+    right: -170px;
+    bottom: 4%;
+    animation-delay: -8s;
+}
+
+.stars {
+    mix-blend-mode: screen;
+}
+
+.site-nav {
+    position: sticky;
+    top: 12px;
+    width: calc(100% - 36px);
+    max-width: 1420px;
+    margin: 12px auto 0;
+    padding: 17px clamp(18px, 3vw, 38px);
+    border-radius: 20px;
+    background: rgba(8, 13, 31, .58) !important;
+    border: 1px solid rgba(190, 207, 255, .15);
+    border-top-color: rgba(255, 255, 255, .28);
+    backdrop-filter: blur(30px) saturate(175%);
+    -webkit-backdrop-filter: blur(30px) saturate(175%);
+    box-shadow: 0 14px 45px rgba(0, 0, 0, .24),
+                inset 0 1px 0 rgba(255, 255, 255, .10);
+}
+
+.site-nav .nav-links a {
+    padding: 8px 0;
+}
+
+.site-nav .nav-links a:focus-visible,
+.site-nav .logo:focus-visible,
+button:focus-visible,
+a:focus-visible {
+    outline: 2px solid #a9c2ff;
+    outline-offset: 5px;
+    border-radius: 5px;
+}
+
+.photo-card,
+.moment,
+.message-card,
+.letter-card {
+    box-shadow: 0 18px 55px rgba(0, 0, 0, .24),
+                inset 0 1px 0 rgba(255, 255, 255, .08);
+}
+
+@keyframes ambientFloat {
+    from { transform: translate3d(0, -12px, 0) scale(.94); }
+    to { transform: translate3d(35px, 28px, 0) scale(1.08); }
+}
+
+@media (max-width: 650px) {
+    .site-nav {
+        width: calc(100% - 22px);
+        padding: 14px 15px;
+        border-radius: 16px;
+        gap: 12px;
+    }
+
+    .site-nav .nav-links {
+        gap: clamp(9px, 2.5vw, 16px);
+        flex-wrap: wrap;
+        justify-content: flex-end;
+    }
+
+    .site-nav .nav-links a {
+        font-size: clamp(9px, 2.5vw, 11px);
+    }
+
+    .ambient {
+        width: 260px;
+        height: 260px;
+        filter: blur(85px);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient {
+        animation: none !important;
+    }
+}
