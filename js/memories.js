@@ -26,14 +26,9 @@ function protectImage(img) {
   img.addEventListener("contextmenu", e => e.preventDefault());
   img.addEventListener("dragstart", e => e.preventDefault());
 }
-document.addEventListener("contextmenu", e => {
-  if (e.target.closest(".gallery, .lightbox")) e.preventDefault();
-});
+/* Keep ordinary image saving available; use the Download photo link in the viewer. */
 document.addEventListener("dragstart", e => {
-  if (e.target.closest(".gallery, .lightbox")) e.preventDefault();
-});
-document.addEventListener("copy", e => {
-  if (e.target.closest?.(".gallery, .lightbox")) e.preventDefault();
+  if (e.target.closest(".gallery, .lightbox") && e.target.tagName === "IMG") e.preventDefault();
 });
 function openLightbox(index) {
   current = index;
@@ -41,6 +36,14 @@ function openLightbox(index) {
   if (!photo) return;
   lightboxImage.src = photo.url;
   lightboxImage.alt = photo.caption || "Our memory";
+  let download=document.getElementById("memoryDownload");
+  if(!download){
+    download=document.createElement("a");download.id="memoryDownload";download.className="memory-download";
+    download.textContent="Download photo ↓";download.setAttribute("download","");
+    document.querySelector(".lightbox-content").append(download);
+  }
+  download.href=photo.url;
+  download.download=(photo.caption||"lovely-memory").replace(/[^a-z0-9-_]+/gi,"-")+".jpg";
   photoCount.textContent = (current + 1) + " / " + allPhotos.length;
   lightbox.classList.add("active");
   lightbox.setAttribute("aria-hidden","false");
