@@ -40,8 +40,8 @@ let mode="login";
 function status(t){$("siteAuthStatus").textContent=t||"";}
 function partnerName(user){
  const email=(user.email||"").toLowerCase();
- if(email==="raveenagunawardhana2007@gmail.com") return "Raveena";
- if(email==="chenithakodithuwakku000@gmail.com") return "Chenitha";
+ if(email==="raveenagunawardhana2007@gmail.com") return "THRA BABA";
+ if(email==="chenithakodithuwakku000@gmail.com") return "BUNO";
  return user.user_metadata?.display_name || "Friend";
 }
 function showProfile(user){
