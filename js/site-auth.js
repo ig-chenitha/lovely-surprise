@@ -60,10 +60,15 @@ async function enter(user){
  setTimeout(()=>{root.classList.remove("site-auth-active");overlay.remove();},400);
 }
 $("siteCreate").addEventListener("click",()=>{
- mode="signup";$("siteNameField").hidden=false;$("siteAuthTitle").textContent="Create Your Profile";
- $("siteAuthIntro").textContent="Make a little profile for your place in our universe.";
- $("siteAuthSubmit").textContent="Create my account ♡";$("siteCreate").textContent="Back to login";status("");
- $("siteCreate").onclick=()=>{mode="login";$("siteNameField").hidden=true;$("siteAuthTitle").textContent="Welcome to Our Little Universe";$("siteAuthIntro").textContent="Sign in to enter your special little world.";$("siteAuthSubmit").textContent="Log in ♡";$("siteCreate").textContent="Create account";$("siteCreate").onclick=null;};
+ if(mode==="login"){
+  mode="signup";$("siteNameField").hidden=false;$("siteAuthTitle").textContent="Create Your Profile";
+  $("siteAuthIntro").textContent="Make a little profile for your place in our universe.";
+  $("siteAuthSubmit").textContent="Create my account ♡";$("siteCreate").textContent="Back to login";status("");
+ }else{
+  mode="login";$("siteNameField").hidden=true;$("siteAuthTitle").textContent="Welcome to Our Little Universe";
+  $("siteAuthIntro").textContent="Sign in to enter your special little world.";
+  $("siteAuthSubmit").textContent="Log in ♡";$("siteCreate").textContent="Create account";status("");
+ }
 });
 $("siteAuthForm").addEventListener("submit",async e=>{
  e.preventDefault();const email=$("siteEmail").value.trim().toLowerCase(),password=$("sitePassword").value;
