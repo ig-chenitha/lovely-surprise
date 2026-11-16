@@ -1,6 +1,6 @@
 (() => {
 "use strict";
-const URL="https://qenobhmetbarxepggocx.supabase.co", KEY="sb_publishable_U3jXC6vggzC_bqHJxmAoEA_riJcQh29";
+const URL="https://jdandkmbnkeubxmzmjef.supabase.co", KEY="sb_publishable_ei8L_sMkm65kNoNNQ7vpcg_lEL6vQOU";
 const ALLOWED=["chenithakodithuwakku000@gmail.com","raveenagunawardhana2007@gmail.com"];
 const root=document.documentElement;
 let client = (window.supabase && typeof window.supabase.createClient === "function")
