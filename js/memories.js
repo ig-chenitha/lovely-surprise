@@ -1,7 +1,7 @@
 (() => {
 "use strict";
-const SUPABASE_URL = "https://qenobhmetbarxepggocx.supabase.co";
-const SUPABASE_KEY = "sb_publishable_U3jXC6vggzC_bqHJxmAoEA_riJcQh29";
+const SUPABASE_URL = "https://jdandkmbnkeubxmzmjef.supabase.co";
+const SUPABASE_KEY = "sb_publishable_ei8L_sMkm65kNoNNQ7vpcg_lEL6vQOU";
 const ALLOWED = ["raveenagunawardhana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
 const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const gallery = document.querySelector(".gallery");
