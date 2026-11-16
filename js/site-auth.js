@@ -54,7 +54,7 @@ async function enter(user){
   let p=nav.querySelector(".site-profile-chip");
   if(!p){p=document.createElement("button");p.type="button";p.className="site-profile-chip";nav.append(p);}
   p.textContent="♡ "+name;
-  p.addEventListener("click",()=>{showProfile(user);overlay.classList.remove("site-auth-exit");root.classList.add("site-auth-active");});
+  p.addEventListener("click",()=>{showProfile(user);overlay.classList.remove("site-auth-exit");if(!overlay.isConnected)document.body.prepend(overlay);root.classList.add("site-auth-active");});
  });
  overlay.classList.add("site-auth-exit");
  setTimeout(()=>{root.classList.remove("site-auth-active");overlay.remove();},400);
