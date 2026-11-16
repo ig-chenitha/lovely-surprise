@@ -42,19 +42,31 @@ document.body.prepend(overlay);
 const $=id=>document.getElementById(id);
 let mode="login";
 function status(t){$("siteAuthStatus").textContent=t||"";}
+function partnerName(user){
+ const email=(user.email||"").toLowerCase();
+ if(email==="raveenagunawardhana2007@gmail.com") return "Raveena";
+ if(email==="chenithakodithuwakku000@gmail.com") return "Chenitha";
+ return user.user_metadata?.display_name || "Friend";
+}
 function showProfile(user){
  $("siteAuthForm").hidden=true;$("siteAuthActions").hidden=true;$("siteProfile").hidden=false;
- const name=user.user_metadata?.display_name||user.email.split("@")[0];
- $("siteAuthTitle").textContent="Welcome back ♡";
- $("siteAuthIntro").textContent="Your little universe is ready.";
- $("siteProfileName").textContent=name;$("siteProfileEmail").textContent=user.email;
- $("siteProfileAvatar").textContent=(name.trim()[0]||"♡").toUpperCase();
+ const name=partnerName(user);
+ $("siteAuthTitle").textContent="Hey "+name+"! ♡";
+ $("siteAuthIntro").textContent="Your little surprise is ready. Welcome to our little universe.";
+ $("siteProfileName").textContent=name;
+ $("siteProfileEmail").textContent=user.email;
+ $("siteProfileAvatar").textContent=name[0].toUpperCase();
+ $("siteEnter").textContent="Enter Your Little Universe ♡";
 }
 function showForm(){
  $("siteAuthForm").hidden=false;$("siteAuthActions").hidden=false;$("siteProfile").hidden=true;
 }
 async function enter(user){
- const name=user.user_metadata?.display_name||user.email.split("@")[0];
+ const name=partnerName(user);
+ const gate=document.getElementById("visitorGate");
+ const loader=document.getElementById("surpriseLoader");
+ if(gate){gate.classList.remove("gate-leaving");gate.style.display="none";}
+ root.classList.remove("visitor-gate-active");
  document.querySelectorAll(".site-nav").forEach(nav=>{
   let p=nav.querySelector(".site-profile-chip");
   if(!p){p=document.createElement("button");p.type="button";p.className="site-profile-chip";nav.append(p);}
@@ -62,7 +74,12 @@ async function enter(user){
   p.addEventListener("click",()=>{showProfile(user);overlay.classList.remove("site-auth-exit");if(!overlay.isConnected)document.body.prepend(overlay);root.classList.add("site-auth-active");});
  });
  overlay.classList.add("site-auth-exit");
- setTimeout(()=>{root.classList.remove("site-auth-active");overlay.remove();},400);
+ if(loader){loader.classList.add("is-visible");loader.setAttribute("aria-hidden","false");}
+ setTimeout(()=>{
+  root.classList.remove("site-auth-active");
+  overlay.remove();
+  if(loader){loader.classList.remove("is-visible");loader.setAttribute("aria-hidden","true");}
+ },1300);
 }
 $("siteCreate").addEventListener("click",()=>{
  if(mode==="login"){
