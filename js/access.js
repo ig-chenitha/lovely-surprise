@@ -1,52 +1,48 @@
 (() => {
   "use strict";
   const KEY = "chenithaRaveenaSurpriseUnlocked";
-  const isUnlocked = () => localStorage.getItem(KEY) === "yes";
-  const isHome = /(?:^|\/)index\.html?$/.test(location.pathname) || location.pathname.endsWith("/lovely-surprise/");
+  const isUnlocked = () => {
+    try { return localStorage.getItem(KEY) === "yes"; }
+    catch (error) { return false; }
+  };
+  const path = location.pathname;
+  const isHome = /\/index\.html?$/.test(path) || path.endsWith("/lovely-surprise/") || path.endsWith("/lovely-surprise");
 
   if (!isHome && !isUnlocked()) {
     location.replace(new URL("../index.html?locked=1", location.href).href);
     return;
   }
 
-  const pageLinks = document.querySelectorAll('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]');
-
   function refreshLocks() {
     const unlocked = isUnlocked();
-    pageLinks.forEach(link => {
+    document.querySelectorAll('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]').forEach(link => {
       link.classList.toggle("page-locked", !unlocked);
       link.setAttribute("aria-disabled", String(!unlocked));
-      if (!unlocked) link.title = "Open the surprise first";
-      else link.removeAttribute("title");
-    });
-  }
-
-  pageLinks.forEach(link => {
-    link.addEventListener("click", event => {
-      if (!isUnlocked()) {
-        event.preventDefault();
-        const message = document.getElementById("message");
-        if (message) {
-          message.classList.remove("hidden");
-          message.scrollIntoView({behavior:"smooth", block:"center"});
-        }
-        const button = document.getElementById("surpriseBtn");
-        if (button) button.focus();
+      if (unlocked) {
+        link.removeAttribute("title");
+      } else {
+        link.title = "Open the surprise first";
       }
     });
+    document.documentElement.classList.toggle("surprise-unlocked", unlocked);
+  }
+
+  document.addEventListener("click", event => {
+    const link = event.target.closest('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]');
+    if (link && !isUnlocked()) {
+      event.preventDefault();
+      const message = document.getElementById("message");
+      const button = document.getElementById("surpriseBtn");
+      if (message) {
+        message.classList.remove("hidden");
+        message.scrollIntoView({ behavior: "smooth", block: "center" });
+      }
+      if (button) button.focus();
+    }
   });
 
-  const surpriseButton = document.getElementById("surpriseBtn");
-  if (surpriseButton) {
-    surpriseButton.addEventListener("click", () => {
-      const message = document.getElementById("message");
-      if (message && !message.classList.contains("hidden")) {
-        localStorage.setItem(KEY, "yes");
-        refreshLocks();
-        surpriseButton.setAttribute("aria-label", "Surprise opened. All pages unlocked.");
-      }
-    });
-  }
+  window.addEventListener("surpriseUnlocked", refreshLocks);
+  window.addEventListener("storage", refreshLocks);
 
   if (new URLSearchParams(location.search).has("locked")) {
     history.replaceState({}, "", location.pathname);
