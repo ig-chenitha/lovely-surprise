@@ -398,3 +398,77 @@ body {
         animation: none !important;
     }
 }
+
+
+/* ==========================================
+   LOW-END DEVICE STABILITY PATCH
+   Keep the same colours and layout while
+   reducing continuously animated paint work.
+========================================== */
+
+/* A moving full-screen star layer repaints constantly. */
+.stars {
+    animation: none !important;
+    transform: none !important;
+    will-change: auto !important;
+}
+
+/* Stop decorative infinite pulsing; retain initial page entrance. */
+.heart-symbol,
+.welcome h1 span,
+.hero-heart,
+.heading-heart {
+    animation: none !important;
+}
+
+/* Avoid expensive blur compositing on large full-screen/cards. */
+.moment,
+.photo-card,
+.lightbox,
+.letter-overlay,
+.message-card,
+.letter-card {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* Keep translucent glass surfaces without live blur. */
+.site-nav,
+.surprise-btn,
+.open-button {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+/* Avoid browser promoting many elements to GPU layers. */
+.photo-card img,
+.moment,
+.envelope,
+.letter-card {
+    will-change: auto !important;
+}
+
+/* Images should not delay rendering of the rest of the gallery. */
+.photo-card img {
+    content-visibility: auto;
+}
+
+/* Keep interactions responsive on touch devices. */
+@media (hover: none) {
+    .photo-card:hover,
+    .moment:hover,
+    .surprise-btn:hover,
+    .open-button:hover {
+        transform: none !important;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition-duration: .01ms !important;
+        scroll-behavior: auto !important;
+    }
+}
