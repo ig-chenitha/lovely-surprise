@@ -1,0 +1,210 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#000000">
+
+    <title>Our Memories | Chenitha & Raveena</title>
+
+    <meta name="description" content="Little moments, forever memories. A collection of memories shared by Chenitha and Raveena.">
+
+    <!-- Original Memories CSS -->
+    <link rel="stylesheet" href="../css/memories.css">
+
+    <!-- Universal Liquid Glass Theme -->
+    <link rel="stylesheet" href="../css/glass-theme.css">
+
+</head>
+
+<body>
+
+    <!-- Animated Background -->
+    <div class="stars"></div>
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <!-- Liquid Glass Navigation -->
+    <nav class="site-nav">
+
+        <a href="../index.html" class="logo">
+            C <span>♡</span> R
+        </a>
+
+        <div class="nav-links">
+
+            <a href="../index.html">Home</a>
+
+            <a href="story.html">Our Story</a>
+
+            <a href="memories.html" class="active">Memories</a>
+
+            <a href="letter.html">Letter</a>
+
+        </div>
+
+    </nav>
+
+    <!-- Gallery Heading -->
+    <header class="gallery-heading">
+
+        <span>OUR LITTLE UNIVERSE</span>
+
+        <h1>
+            Our <em>Memories</em>
+        </h1>
+
+        <p>
+            Little moments, forever memories.
+        </p>
+
+        <div class="heading-heart">♡</div>
+
+    </header>
+
+    <main>
+
+        <!-- Memories Gallery -->
+        <section class="gallery">
+
+            <!-- Photo 01 -->
+            <div class="photo-card" data-index="0">
+
+                <img
+                    src="../images/memory1.jpeg"
+                    alt="Our first memory"
+                >
+
+                <div class="photo-caption">
+
+                    <span>MEMORY 01</span>
+
+                    <h2>A Beautiful Moment ♡</h2>
+
+                </div>
+
+            </div>
+
+            <!-- Photo 02 -->
+            <div class="photo-card" data-index="1">
+
+                <img
+                    src="../images/memory2.jpeg"
+                    alt="Our second memory"
+                >
+
+                <div class="photo-caption">
+
+                    <span>MEMORY 02</span>
+
+                    <h2>Just You and Me ✨</h2>
+
+                </div>
+
+            </div>
+
+            <!-- Photo 03 -->
+            <div class="photo-card" data-index="2">
+
+                <img
+                    src="../images/memory3.jpeg"
+                    alt="Our third memory"
+                >
+
+                <div class="photo-caption">
+
+                    <span>MEMORY 03</span>
+
+                    <h2>A Day to Remember</h2>
+
+                </div>
+
+            </div>
+
+            <!-- Photo 04 -->
+            <div class="photo-card" data-index="3">
+
+                <img
+                    src="../images/memory4.jpeg"
+                    alt="Our fourth memory"
+                >
+
+                <div class="photo-caption">
+
+                    <span>MEMORY 04</span>
+
+                    <h2>My Favourite Person ❤️</h2>
+
+                </div>
+
+            </div>
+
+        </section>
+
+        <!-- Gallery Bottom -->
+        <section class="gallery-bottom">
+
+            <span>MORE THAN JUST PHOTOGRAPHS</span>
+
+            <h2>Forever in my heart.</h2>
+
+            <a href="story.html">
+                ← Back to Our Story
+            </a>
+
+        </section>
+
+    </main>
+
+    <!-- Fullscreen Image Viewer -->
+    <div
+        class="lightbox"
+        id="lightbox"
+        aria-hidden="true"
+    >
+
+        <button
+            class="close"
+            id="closeBtn"
+            aria-label="Close"
+        >
+            ×
+        </button>
+
+        <button
+            class="prev"
+            id="prevBtn"
+            aria-label="Previous photo"
+        >
+            ‹
+        </button>
+
+        <div class="lightbox-content">
+
+            <img
+                id="lightboxImage"
+                src=""
+                alt="Selected memory"
+            >
+
+            <p id="photoCount">1 / 4</p>
+
+        </div>
+
+        <button
+            class="next"
+            id="nextBtn"
+            aria-label="Next photo"
+        >
+            ›
+        </button>
+
+    </div>
+
+    <!-- Memories JavaScript -->
+    <script src="../js/memories.js"></script>
+
+</body>
+</html>
