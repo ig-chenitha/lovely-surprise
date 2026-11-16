@@ -14,7 +14,7 @@
     let timers = [];
 
     function clearTimers() {
-        timers.forEach(window.clearTimeout);
+        timers.forEach(timer => window.clearTimeout(timer));
         timers = [];
     }
 
