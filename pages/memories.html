@@ -66,6 +66,39 @@
 
     <main>
 
+    
+        <section class="memory-admin" id="memoryAdmin">
+          <div class="memory-admin-heading">
+            <span>GROW OUR LITTLE UNIVERSE</span>
+            <h2>Add a <em>New Memory</em> ♡</h2>
+            <p>Sign in with either partner email to upload photos for both of you.</p>
+          </div>
+          <div id="memoryAuth" class="memory-auth">
+            <form id="memoryLoginForm">
+              <label for="memoryEmail">Partner email</label>
+              <input id="memoryEmail" type="email" autocomplete="username" required placeholder="Your email address">
+              <label for="memoryPassword">Password</label>
+              <input id="memoryPassword" type="password" autocomplete="current-password" required minlength="8" placeholder="At least 8 characters">
+              <div class="memory-auth-actions">
+                <button type="submit">Log in ♡</button>
+                <button type="button" class="memory-secondary" id="memorySignup">Create account</button>
+              </div>
+            </form>
+            <p class="memory-status" id="memoryAuthStatus" aria-live="polite">Only Chenitha and Raveena's approved email accounts can upload.</p>
+          </div>
+          <div id="memoryUploader" class="memory-uploader" hidden>
+            <p class="memory-signed-in" id="memorySignedIn"></p>
+            <label class="memory-file-label" for="memoryFiles"><span>＋</span> Choose photos</label>
+            <input id="memoryFiles" type="file" accept="image/jpeg,image/png,image/webp,image/gif" multiple hidden>
+            <div id="memoryPreview" class="memory-preview"></div>
+            <label for="memoryCaption">Caption (optional, applies to selected photos)</label>
+            <input id="memoryCaption" type="text" maxlength="120" placeholder="A little moment to remember...">
+            <button id="memoryUploadBtn" type="button">Upload memories ♡</button>
+            <button id="memoryLogout" type="button" class="memory-secondary">Log out</button>
+            <p class="memory-status" id="memoryUploadStatus" aria-live="polite"></p>
+          </div>
+        </section>
+
         <!-- Memories Gallery -->
         <section class="gallery">
 
@@ -211,6 +244,7 @@
 
     </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Memories JavaScript -->
     <script src="../js/memories.js"></script>
 
