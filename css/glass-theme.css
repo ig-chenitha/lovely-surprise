@@ -698,3 +698,14 @@ body {
 @media(prefers-reduced-motion:reduce) {
  .loader-spinner,.loader-track span { animation:none; }
 }
+
+
+/* Initial website entry loader: shown before the home page appears */
+html.site-entry-loading #surpriseLoader {
+    opacity: 1 !important;
+    visibility: visible !important;
+    pointer-events: auto !important;
+}
+html.site-entry-loading body > :not(#surpriseLoader) {
+    visibility: hidden !important;
+}
