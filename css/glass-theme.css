@@ -338,3 +338,63 @@ a:focus-visible {
         animation: none !important;
     }
 }
+
+
+/* ==========================================
+   PERFORMANCE FIX — KEEP THE GLASS LOOK LIGHT
+   Avoid large live blur filters and constant
+   background animations on slower devices.
+========================================== */
+
+body {
+    background-attachment: scroll !important;
+}
+
+.ambient {
+    filter: none !important;
+    opacity: 1;
+    animation: none !important;
+    background-color: transparent !important;
+}
+
+.ambient-one {
+    background: radial-gradient(
+        circle,
+        rgba(66, 109, 255, .24) 0%,
+        rgba(66, 109, 255, .10) 38%,
+        transparent 72%
+    ) !important;
+}
+
+.ambient-two {
+    background: radial-gradient(
+        circle,
+        rgba(138, 85, 255, .22) 0%,
+        rgba(138, 85, 255, .09) 40%,
+        transparent 72%
+    ) !important;
+}
+
+.stars {
+    animation: none !important;
+    mix-blend-mode: normal;
+}
+
+.site-nav {
+    backdrop-filter: blur(12px) saturate(130%);
+    -webkit-backdrop-filter: blur(12px) saturate(130%);
+}
+
+@media (max-width: 650px) {
+    .site-nav {
+        backdrop-filter: blur(8px) saturate(120%);
+        -webkit-backdrop-filter: blur(8px) saturate(120%);
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .ambient,
+    .stars {
+        animation: none !important;
+    }
+}
