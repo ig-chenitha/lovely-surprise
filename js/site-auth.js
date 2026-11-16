@@ -59,6 +59,7 @@ function showForm(){
 }
 async function enter(user){
  const name=partnerName(user);
+ try{localStorage.setItem("chenithaRaveenaSurpriseUnlocked","yes");}catch(e){}
  const gate=document.getElementById("visitorGate");
  const loader=document.getElementById("surpriseLoader");
  if(gate){gate.classList.remove("gate-leaving");gate.style.display="none";}
@@ -111,7 +112,7 @@ $("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();m
 function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  client.auth.getSession().then(({data})=>{
-  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))showProfile(data.session.user);
+  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user);
   else if(data.session)client.auth.signOut();
  });
 }
