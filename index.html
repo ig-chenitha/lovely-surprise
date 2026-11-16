@@ -5,10 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
-    <script>document.documentElement.classList.add("site-entry-loading");</script>
+    <script>document.documentElement.classList.add("visitor-gate-active");</script>
     <style>
-      html.site-entry-loading body > :not(#surpriseLoader) { visibility: hidden !important; }
-      html.site-entry-loading #surpriseLoader { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+      html.visitor-gate-active body > :not(#visitorGate):not(#surpriseLoader) { visibility: hidden !important; }
+      html.visitor-gate-active #visitorGate { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
     </style>
 
 
@@ -21,6 +21,17 @@
 </head>
 
 <body>
+
+    <section id="visitorGate" class="visitor-gate" aria-label="Welcome">
+        <div class="visitor-gate-card">
+            <div class="gate-heart">♡</div>
+            <p class="gate-eyebrow">A LITTLE SURPRISE AWAITS</p>
+            <h1>Hey Thra Bba!</h1>
+            <p class="gate-question">Are you here for the surprise?</p>
+            <button id="gateYes" class="gate-yes" type="button">Yes, I'm ready ♡</button>
+            <p class="gate-footnote">A little world made with love</p>
+        </div>
+    </section>
 
     <div id="surpriseLoader" class="surprise-loader" aria-hidden="true">
         <div class="loader-glass">
@@ -120,13 +131,28 @@
     <script src="js/script.js"></script>
     <script id="entryLoaderScript">
       (() => {
-        const finishEntry = () => window.setTimeout(() => {
-          document.documentElement.classList.remove("site-entry-loading");
-          const loader = document.getElementById("surpriseLoader");
-          if (loader) { loader.classList.remove("is-visible"); loader.setAttribute("aria-hidden", "true"); }
-        }, 1900);
-        if (document.readyState === "complete") finishEntry();
-        else window.addEventListener("load", finishEntry, { once: true });
+        const gate = document.getElementById("visitorGate");
+        const yes = document.getElementById("gateYes");
+        const loader = document.getElementById("surpriseLoader");
+        if (!gate || !yes) return;
+        yes.addEventListener("click", () => {
+          yes.disabled = true;
+          gate.classList.add("gate-leaving");
+          window.setTimeout(() => {
+            gate.style.display = "none";
+            if (loader) {
+              loader.classList.add("is-visible");
+              loader.setAttribute("aria-hidden", "false");
+            }
+            window.setTimeout(() => {
+              document.documentElement.classList.remove("visitor-gate-active");
+              if (loader) {
+                loader.classList.remove("is-visible");
+                loader.setAttribute("aria-hidden", "true");
+              }
+            }, 2100);
+          }, 350);
+        });
       })();
     </script>
     <script src="js/access.js"></script>
