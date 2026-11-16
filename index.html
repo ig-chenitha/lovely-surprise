@@ -5,6 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#000000">
+    <script>document.documentElement.classList.add("site-entry-loading");</script>
+    <style>
+      html.site-entry-loading body > :not(#surpriseLoader) { visibility: hidden !important; }
+      html.site-entry-loading #surpriseLoader { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
+    </style>
+
 
     <title>Chenitha ♡ Raveena | Our Little Universe</title>
 
@@ -112,6 +118,17 @@
     </footer>
 
     <script src="js/script.js"></script>
+    <script id="entryLoaderScript">
+      (() => {
+        const finishEntry = () => window.setTimeout(() => {
+          document.documentElement.classList.remove("site-entry-loading");
+          const loader = document.getElementById("surpriseLoader");
+          if (loader) { loader.classList.remove("is-visible"); loader.setAttribute("aria-hidden", "true"); }
+        }, 1900);
+        if (document.readyState === "complete") finishEntry();
+        else window.addEventListener("load", finishEntry, { once: true });
+      })();
+    </script>
     <script src="js/access.js"></script>
 
     <script src="js/love-effects.js"></script>
