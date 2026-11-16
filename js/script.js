@@ -4,6 +4,7 @@
     const surpriseButton = document.getElementById("surpriseBtn");
     const messageCard = document.getElementById("message");
     const heartContainer = document.getElementById("heartContainer");
+    const UNLOCK_KEY = "chenithaRaveenaSurpriseUnlocked";
 
     if (surpriseButton && messageCard) {
         surpriseButton.addEventListener("click", () => {
@@ -15,6 +16,9 @@
                 : 'Open Your Surprise <span>♡</span>';
 
             if (isHidden) {
+                // Unlock every protected page immediately on the first opening.
+                try { localStorage.setItem(UNLOCK_KEY, "yes"); } catch (error) {}
+                window.dispatchEvent(new Event("surpriseUnlocked"));
                 messageCard.scrollIntoView({ behavior: "smooth", block: "center" });
                 createHearts(heartContainer, 12);
             }
@@ -23,7 +27,6 @@
 
     function createHearts(container, amount) {
         if (!container) return;
-
         for (let i = 0; i < amount; i += 1) {
             const heart = document.createElement("span");
             heart.className = "floating-heart";
