@@ -132,7 +132,7 @@ document.getElementById("memorySignup").addEventListener("click",async()=>{
  const {error}=await client.auth.signUp({email,password});
  say(authStatus,error?error.message:"Check your email to confirm the account, then log in here. ♡");
 });
-document.getElementById("memoryLogout").addEventListener("click",async()=>{await client.auth.signOut();});
+document.getElementById("memoryLogout").addEventListener("click",async()=>{await client.auth.signOut();try{localStorage.removeItem("chenithaRaveenaSurpriseUnlocked");}catch(e){}window.location.replace("../index.html");});
 filesInput.addEventListener("change",()=>{
  selectedFiles=Array.from(filesInput.files||[]);
  preview.innerHTML="";
