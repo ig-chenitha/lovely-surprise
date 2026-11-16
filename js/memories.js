@@ -69,7 +69,25 @@ function renderGallery(uploaded) {
     const cap = document.createElement("div"); cap.className = "photo-caption";
     const label = document.createElement("span"); label.textContent = photo.label || "MEMORY";
     const title = document.createElement("h2"); title.textContent = photo.caption || "A Beautiful Moment ♡";
-    cap.append(label,title); card.append(img,cap);
+    cap.append(label,title);
+    if (photo.id) {
+      const removeBtn=document.createElement("button");
+      removeBtn.type="button"; removeBtn.className="memory-delete";
+      removeBtn.textContent="Remove photo";
+      removeBtn.addEventListener("click",async event=>{
+        event.stopPropagation();
+        if(!confirm("Remove this memory from the shared gallery?")) return;
+        const {data:{session}}=await client.auth.getSession();
+        if(!session || !ALLOWED.includes(session.user.email.toLowerCase())) return;
+        const {error:storageError}=await client.storage.from("lovely-memories").remove([photo.object_path]);
+        if(storageError){alert("Could not remove photo: "+storageError.message);return;}
+        const {error:rowError}=await client.from("memories_uploads").delete().eq("id",photo.id);
+        if(rowError){alert("Could not remove photo record: "+rowError.message);return;}
+        await loadMemories();
+      });
+      cap.append(removeBtn);
+    }
+    card.append(img,cap);
     card.tabIndex = 0; card.setAttribute("role","button");
     card.addEventListener("click",()=>openLightbox(index));
     card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLightbox(index);}});
@@ -81,7 +99,7 @@ async function loadMemories() {
   if(error){console.error(error);return;}
   const uploaded=(data||[]).map(row=>({
     url:client.storage.from("lovely-memories").getPublicUrl(row.object_path).data.publicUrl,
-    caption:row.caption, label:"SHARED MEMORY", id:row.id
+    caption:row.caption, label:"SHARED MEMORY", id:row.id, object_path:row.object_path
   }));
   renderGallery(uploaded);
 }
