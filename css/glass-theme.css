@@ -627,3 +627,74 @@ body {
         backdrop-filter: blur(5px) saturate(115%) !important;
     }
 }
+
+
+/* Deep transparent glass + dedicated surprise loading screen */
+.site-nav,
+.countdown-card,
+.photo-card,
+.moment,
+.message-card,
+.letter-card,
+.unlock-hint,
+.surprise-btn,
+.open-button {
+    background-color: rgba(8, 16, 40, .22) !important;
+    border-color: rgba(205, 222, 255, .25) !important;
+    -webkit-backdrop-filter: blur(22px) saturate(165%) !important;
+    backdrop-filter: blur(22px) saturate(165%) !important;
+}
+@media(max-width:650px) {
+    .site-nav,.countdown-card,.photo-card,.moment,.message-card,.letter-card {
+        -webkit-backdrop-filter: blur(14px) saturate(145%) !important;
+        backdrop-filter: blur(14px) saturate(145%) !important;
+    }
+}
+.surprise-loader {
+    position: fixed;
+    inset: 0;
+    z-index: 20000;
+    display: grid;
+    place-items: center;
+    padding: 22px;
+    background: rgba(1, 5, 18, .56);
+    -webkit-backdrop-filter: blur(28px) saturate(145%);
+    backdrop-filter: blur(28px) saturate(145%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity .35s ease, visibility .35s ease;
+}
+.surprise-loader.is-visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+.loader-glass {
+    width: min(390px, 100%);
+    padding: 38px 28px;
+    text-align: center;
+    border-radius: 26px;
+    border: 1px solid rgba(210,225,255,.3);
+    background: rgba(255,255,255,.075);
+    box-shadow: 0 22px 70px rgba(0,0,0,.38), inset 0 1px 0 rgba(255,255,255,.2);
+    -webkit-backdrop-filter: blur(24px);
+    backdrop-filter: blur(24px);
+}
+.loader-heart { color:#b9ceff; font-size:48px; text-shadow:0 0 25px rgba(145,178,255,.8); }
+.loader-glass h2 { color:#fff; font-size:22px; margin:15px 0 8px; }
+.loader-glass p { color:rgba(232,239,255,.75); font-size:13px; }
+.loader-spinner {
+    width:28px; height:28px; margin:18px auto;
+    border:2px solid rgba(190,210,255,.22);
+    border-top-color:#c5d6ff; border-radius:50%;
+    animation: loaderSpin .8s linear infinite;
+}
+@keyframes loaderSpin { to { transform:rotate(360deg); } }
+.loader-track { height:3px; margin:22px 0 18px; overflow:hidden; border-radius:8px; background:rgba(255,255,255,.12); }
+.loader-track span { display:block; height:100%; width:40%; border-radius:8px; background:#b9ceff; animation: loaderProgress 2.5s ease-in-out forwards; }
+@keyframes loaderProgress { from { width:0; } to { width:100%; } }
+.loader-glass small { color:rgba(220,230,255,.55); font-size:9px; letter-spacing:2px; }
+@media(prefers-reduced-motion:reduce) {
+ .loader-spinner,.loader-track span { animation:none; }
+}
