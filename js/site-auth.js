@@ -66,7 +66,6 @@ function showForm(){
 }
 async function enter(user){
  const name=partnerName(user);
- try{localStorage.setItem("chenithaRaveenaSurpriseUnlocked","yes");}catch(e){}
  const gate=document.getElementById("visitorGate");
  const loader=document.getElementById("surpriseLoader");
  if(gate){gate.classList.remove("gate-leaving");gate.style.display="none";}
@@ -141,11 +140,11 @@ function enterNavChip(user){
 $("siteEnter").addEventListener("click",async()=>{
  const {data}=await client.auth.getUser();if(data.user)enter(data.user);
 });
-$("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();mode="login";showForm();status("You have been logged out.");});
+$("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();try{localStorage.removeItem("chenithaRaveenaSurpriseUnlocked");}catch(e){}window.location.replace(location.pathname.includes("/pages/")?"../index.html":"index.html");});
 function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
-  if(timeout){root.classList.remove("site-auth-active");status("Connection is taking too long. Please try logging in again.");return;}
+  if(timeout){status("Connection is taking too long. Please try logging in again.");return;}
   if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user);
   else if(data.session)client.auth.signOut();
  });
