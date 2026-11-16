@@ -4,15 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#000000">
-    <script>document.documentElement.classList.add("visitor-gate-active");</script>
-    <style>
-      html.visitor-gate-active body > :not(#visitorGate):not(#surpriseLoader):not(#siteAuthOverlay) { visibility: hidden !important; }
-      html.visitor-gate-active #visitorGate { opacity: 1 !important; visibility: visible !important; pointer-events: auto !important; }
-    </style>
-
-
-    <title>Chenitha ♡ Raveena | Our Little Universe</title>
+    <meta name="theme-color" content="#000000"><title>Chenitha ♡ Raveena | Our Little Universe</title>
 
     <meta name="description" content="A little world made just for Chenitha and Raveena.">
 
@@ -20,20 +12,7 @@
     <link rel="stylesheet" href="css/glass-theme.css">
 </head>
 
-<body>
-
-    <section id="visitorGate" class="visitor-gate" aria-label="Welcome">
-        <div class="visitor-gate-card">
-            <div class="gate-heart">♡</div>
-            <p class="gate-eyebrow">A LITTLE SURPRISE AWAITS</p>
-            <h1>Hey Thra Bba 🐣</h1>
-            <p class="gate-question">Are you here for the surprise?</p>
-            <button id="gateYes" class="gate-yes" type="button">Yes, I'm ready ♡</button>
-            <p class="gate-footnote">A little world made with love</p>
-        </div>
-    </section>
-
-    <div id="surpriseLoader" class="surprise-loader" aria-hidden="true">
+<body><div id="surpriseLoader" class="surprise-loader" aria-hidden="true">
         <div class="loader-glass">
             <div class="loader-heart">♡</div>
             <div class="loader-spinner"></div>
@@ -130,34 +109,7 @@
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script id="siteAuthLoader" src="js/site-auth.js"></script>
-    <script src="js/script.js"></script>
-    <script id="entryLoaderScript">
-      (() => {
-        const gate = document.getElementById("visitorGate");
-        const yes = document.getElementById("gateYes");
-        const loader = document.getElementById("surpriseLoader");
-        if (!gate || !yes) return;
-        yes.addEventListener("click", () => {
-          yes.disabled = true;
-          gate.classList.add("gate-leaving");
-          window.setTimeout(() => {
-            gate.style.display = "none";
-            if (loader) {
-              loader.classList.add("is-visible");
-              loader.setAttribute("aria-hidden", "false");
-            }
-            window.setTimeout(() => {
-              document.documentElement.classList.remove("visitor-gate-active");
-              if (loader) {
-                loader.classList.remove("is-visible");
-                loader.setAttribute("aria-hidden", "true");
-              }
-            }, 2100);
-          }, 350);
-        });
-      })();
-    </script>
-    <script src="js/access.js"></script>
+    <script src="js/script.js"></script><script src="js/access.js"></script>
 
     <script src="js/love-effects.js"></script>
     <script src="js/countdown.js"></script>
