@@ -71,15 +71,7 @@ async function enter(user){
  const loader=document.getElementById("surpriseLoader");
  if(gate){gate.classList.remove("gate-leaving");gate.style.display="none";}
  root.classList.remove("visitor-gate-active");
- document.querySelectorAll(".site-nav").forEach(nav=>{
-  let p=nav.querySelector(".site-profile-chip");
-  if(!p){p=document.createElement("button");p.type="button";p.className="site-profile-chip";nav.append(p);}
-  const avatar=user.user_metadata?.avatar_url;
-  p.innerHTML=avatar?'<img class="site-profile-chip-photo" alt=""> <span></span>':'♡ <span></span>';
-  if(avatar)p.querySelector("img").src=avatar;
-  p.querySelector("span").textContent=name;
-  p.addEventListener("click",()=>{showProfile(user);overlay.classList.remove("site-auth-exit");if(!overlay.isConnected)document.body.prepend(overlay);root.classList.add("site-auth-active");});
- });
+ enterNavChip(user);
  overlay.classList.add("site-auth-exit");
  if(loader){loader.classList.add("is-visible");loader.setAttribute("aria-hidden","false");}
  setTimeout(()=>{
