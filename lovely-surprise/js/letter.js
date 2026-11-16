@@ -1,113 +1,85 @@
+(() => {
+    "use strict";
 
-const envelope = document.getElementById('envelope');
-const openButton = document.getElementById('openButton');
-const closeButton = document.getElementById('closeButton');
-const letterOverlay = document.getElementById('letterOverlay');
-const letterBody = document.getElementById('letterBody');
-const instruction = document.getElementById('instruction');
+    const envelope = document.getElementById("envelope");
+    const openButton = document.getElementById("openButton");
+    const closeButton = document.getElementById("closeButton");
+    const letterOverlay = document.getElementById("letterOverlay");
+    const letterBody = document.getElementById("letterBody");
+    const instruction = document.getElementById("instruction");
 
-let isOpening = false;
-let animationTimers = [];
+    if (!envelope || !openButton || !closeButton || !letterOverlay || !letterBody) return;
 
-function clearLetterTimers() {
-    animationTimers.forEach(timer => clearTimeout(timer));
-    animationTimers = [];
-}
+    let isOpening = false;
+    let timers = [];
 
-function openLetter() {
+    function clearTimers() {
+        timers.forEach(window.clearTimeout);
+        timers = [];
+    }
 
-    if (isOpening) return;
+    function openLetter() {
+        if (isOpening) return;
 
-    isOpening = true;
-    openButton.disabled = true;
+        isOpening = true;
+        openButton.disabled = true;
+        openButton.textContent = "Opening Your Letter…";
+        instruction.textContent = "Opening something special for you…";
+        envelope.classList.add("open");
 
-    instruction.textContent = 'Opening something special for you...';
-    openButton.querySelector('span:first-child').textContent = 'Opening Your Letter...';
+        const revealTimer = window.setTimeout(() => {
+            letterOverlay.classList.add("show");
+            letterOverlay.setAttribute("aria-hidden", "false");
+            document.body.style.overflow = "hidden";
+            instruction.textContent = "A little piece of my heart ♡";
 
-    // Open the 3D envelope
-    envelope.classList.add('open');
+            const paragraphs = letterBody.querySelectorAll("p");
+            paragraphs.forEach((paragraph, index) => {
+                const timer = window.setTimeout(() => {
+                    paragraph.classList.add("visible");
+                }, 450 + index * 500);
+                timers.push(timer);
+            });
 
-    // Show the actual letter
-    const openTimer = setTimeout(() => {
+            closeButton.focus({ preventScroll: true });
+        }, 950);
 
-        letterOverlay.classList.add('show');
+        timers.push(revealTimer);
+    }
 
-        instruction.textContent = 'A little piece of my heart ♡';
+    function closeLetter() {
+        clearTimers();
+        letterOverlay.classList.remove("show");
+        letterOverlay.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
 
-        // Reveal paragraphs one by one
-        const paragraphs = letterBody.querySelectorAll('p');
-
-        paragraphs.forEach((paragraph, index) => {
-
-            const timer = setTimeout(() => {
-                paragraph.classList.add('visible');
-            }, 700 + index * 650);
-
-            animationTimers.push(timer);
+        letterBody.querySelectorAll("p").forEach(paragraph => {
+            paragraph.classList.remove("visible");
         });
 
-    }, 1100);
+        const resetTimer = window.setTimeout(() => {
+            envelope.classList.remove("open");
+            instruction.textContent = "A little surprise is waiting for you";
+            openButton.textContent = "Open Your Letter ♡";
+            openButton.disabled = false;
+            isOpening = false;
+            openButton.focus({ preventScroll: true });
+        }, 550);
 
-    animationTimers.push(openTimer);
-}
+        timers.push(resetTimer);
+    }
 
-function closeLetter() {
+    openButton.addEventListener("click", openLetter);
+    envelope.addEventListener("click", openLetter);
+    closeButton.addEventListener("click", closeLetter);
 
-    clearLetterTimers();
-
-    // Hide the letter
-    letterOverlay.classList.remove('show');
-
-    // Reset paragraph animations
-    const paragraphs = letterBody.querySelectorAll('p');
-
-    paragraphs.forEach(paragraph => {
-        paragraph.classList.remove('visible');
+    letterOverlay.addEventListener("click", event => {
+        if (event.target === letterOverlay) closeLetter();
     });
 
-    // Close envelope
-    const closeTimer = setTimeout(() => {
-
-        envelope.classList.remove('open');
-
-        instruction.textContent =
-            'A little surprise is waiting for you';
-
-        openButton.querySelector('span:first-child').textContent =
-            'Open Your Letter';
-
-        openButton.disabled = false;
-
-        isOpening = false;
-
-    }, 700);
-
-    animationTimers.push(closeTimer);
-}
-
-// Open actions
-openButton.addEventListener('click', openLetter);
-envelope.addEventListener('click', openLetter);
-
-// Close action
-closeButton.addEventListener('click', closeLetter);
-
-// Close when clicking outside the paper
-letterOverlay.addEventListener('click', (event) => {
-
-    if (event.target === letterOverlay) {
-        closeLetter();
-    }
-
-});
-
-// Keyboard support
-document.addEventListener('keydown', (event) => {
-
-    if (event.key === 'Escape' &&
-        letterOverlay.classList.contains('show')) {
-
-        closeLetter();
-    }
-
-});
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape" && letterOverlay.classList.contains("show")) {
+            closeLetter();
+        }
+    });
+})();
