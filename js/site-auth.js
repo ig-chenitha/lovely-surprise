@@ -29,6 +29,9 @@ overlay.innerHTML=`
   <p class="site-auth-status" id="siteAuthStatus" role="status"></p>
   <div id="siteProfile" hidden>
    <div class="site-profile-avatar" id="siteProfileAvatar">♡</div>
+   <input id="siteAvatarFile" type="file" accept="image/png,image/jpeg,image/webp" hidden>
+   <button id="siteChooseAvatar" type="button" class="site-auth-secondary">Change profile photo</button>
+   <p class="site-auth-status" id="siteAvatarStatus" role="status"></p>
    <h2 id="siteProfileName"></h2><p id="siteProfileEmail"></p>
    <button id="siteEnter" type="button">Enter Our Website ♡</button>
    <button id="siteLogout" type="button" class="site-auth-secondary">Log out</button>
@@ -51,7 +54,11 @@ function showProfile(user){
  $("siteAuthIntro").textContent="Your little surprise is ready. Welcome to our little universe.";
  $("siteProfileName").textContent=name;
  $("siteProfileEmail").textContent=user.email;
- $("siteProfileAvatar").textContent=name[0].toUpperCase();
+ const avatar=user.user_metadata?.avatar_url;
+ $("siteProfileAvatar").textContent=avatar?"":name[0].toUpperCase();
+ $("siteProfileAvatar").style.backgroundImage=avatar?'url("'+avatar+'")':"";
+ $("siteProfileAvatar").style.backgroundSize="cover";
+ $("siteProfileAvatar").style.backgroundPosition="center";
  $("siteEnter").textContent="Enter Your Little Universe ♡";
 }
 function showForm(){
@@ -67,7 +74,10 @@ async function enter(user){
  document.querySelectorAll(".site-nav").forEach(nav=>{
   let p=nav.querySelector(".site-profile-chip");
   if(!p){p=document.createElement("button");p.type="button";p.className="site-profile-chip";nav.append(p);}
-  p.textContent="♡ "+name;
+  const avatar=user.user_metadata?.avatar_url;
+  p.innerHTML=avatar?'<img class="site-profile-chip-photo" alt=""> <span></span>':'♡ <span></span>';
+  if(avatar)p.querySelector("img").src=avatar;
+  p.querySelector("span").textContent=name;
   p.addEventListener("click",()=>{showProfile(user);overlay.classList.remove("site-auth-exit");if(!overlay.isConnected)document.body.prepend(overlay);root.classList.add("site-auth-active");});
  });
  overlay.classList.add("site-auth-exit");
@@ -105,13 +115,45 @@ $("siteAuthForm").addEventListener("submit",async e=>{
  if(result.error){status(result.error.message);return;}
  if(result.data.session){showProfile(result.data.user);}
 });
+
+$("siteChooseAvatar").addEventListener("click",()=>$("siteAvatarFile").click());
+$("siteAvatarFile").addEventListener("change",async()=>{
+ const file=$("siteAvatarFile").files?.[0];if(!file)return;
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type)||file.size>5*1024*1024){$("siteAvatarStatus").textContent="Choose a JPG, PNG or WEBP photo under 5 MB.";return;}
+ if(!client){$("siteAvatarStatus").textContent="Login connection unavailable.";return;}
+ $("siteAvatarStatus").textContent="Uploading your profile photo...";
+ const {data:{user},error:getErr}=await client.auth.getUser();
+ if(getErr||!user){$("siteAvatarStatus").textContent="Please log in again.";return;}
+ const ext=file.type==="image/png"?"png":file.type==="image/webp"?"webp":"jpg";
+ const path=user.id+"/avatar."+ext;
+ const {error:upErr}=await client.storage.from("partner-profiles").upload(path,file,{upsert:true,contentType:file.type});
+ if(upErr){$("siteAvatarStatus").textContent=upErr.message;return;}
+ const {data}=client.storage.from("partner-profiles").getPublicUrl(path);
+ const avatar_url=data.publicUrl+"?v="+Date.now();
+ const {error:saveErr}=await client.auth.updateUser({data:{avatar_url}});
+ if(saveErr){$("siteAvatarStatus").textContent=saveErr.message;return;}
+ $("siteAvatarStatus").textContent="Profile photo updated ♡";
+ const updated=(await client.auth.getUser()).data.user;showProfile(updated);enterNavChip(updated);
+});
+function enterNavChip(user){
+ const name=partnerName(user),avatar=user.user_metadata?.avatar_url;
+ document.querySelectorAll(".site-nav").forEach(nav=>{
+  let p=nav.querySelector(".site-profile-chip");
+  if(!p){p=document.createElement("button");p.type="button";p.className="site-profile-chip";nav.append(p);}
+  p.innerHTML=avatar?'<img class="site-profile-chip-photo" alt=""> <span></span>':'♡ <span></span>';
+  if(avatar)p.querySelector("img").src=avatar;
+  p.querySelector("span").textContent=name;
+  p.onclick=()=>{showProfile(user);overlay.classList.remove("site-auth-exit");if(!overlay.isConnected)document.body.prepend(overlay);root.classList.add("site-auth-active");};
+ });
+}
 $("siteEnter").addEventListener("click",async()=>{
  const {data}=await client.auth.getUser();if(data.user)enter(data.user);
 });
 $("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();mode="login";showForm();status("You have been logged out.");});
 function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
- client.auth.getSession().then(({data})=>{
+ Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
+  if(timeout){root.classList.remove("site-auth-active");status("Connection is taking too long. Please try logging in again.");return;}
   if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user);
   else if(data.session)client.auth.signOut();
  });
