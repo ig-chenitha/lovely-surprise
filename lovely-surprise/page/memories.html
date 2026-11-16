@@ -1,0 +1,95 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#050816">
+    <title>Our Memories | Chenitha & Raveena</title>
+    <link rel="stylesheet" href="../css/memories.css">
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <nav class="site-nav">
+        <a href="../index.html" class="logo">C ♡ R</a>
+
+        <div class="nav-links">
+            <a href="../index.html">Home</a>
+            <a href="story.html">Our Story</a>
+            <a href="memories.html" class="active">Memories</a>
+        </div>
+    </nav>
+
+    <header class="gallery-heading">
+        <span>OUR LITTLE UNIVERSE</span>
+        <h1>Our <em>Memories</em></h1>
+        <p>Little moments, forever memories.</p>
+        <div class="heading-heart">♡</div>
+    </header>
+
+    <main>
+        <section class="gallery">
+
+            <div class="photo-card" data-index="0">
+                <img src="../images/memory1.jpeg" alt="Our first memory">
+                <div class="photo-caption">
+                    <span>MEMORY 01</span>
+                    <h2>A Beautiful Moment ♡</h2>
+                </div>
+            </div>
+
+            <div class="photo-card" data-index="1">
+                <img src="../images/memory2.jpeg" alt="Our second memory">
+                <div class="photo-caption">
+                    <span>MEMORY 02</span>
+                    <h2>Just You and Me ✨</h2>
+                </div>
+            </div>
+
+            <div class="photo-card" data-index="2">
+                <img src="../images/memory3.jpeg" alt="Our third memory">
+                <div class="photo-caption">
+                    <span>MEMORY 03</span>
+                    <h2>A Day to Remember</h2>
+                </div>
+            </div>
+
+            <div class="photo-card" data-index="3">
+                <img src="../images/memory4.jpeg" alt="Our fourth memory">
+                <div class="photo-caption">
+                    <span>MEMORY 04</span>
+                    <h2>My Favourite Person ❤️</h2>
+                </div>
+            </div>
+
+        </section>
+
+        <section class="gallery-bottom">
+            <span>MORE THAN JUST PHOTOGRAPHS</span>
+            <h2>Forever in my heart.</h2>
+            <a href="story.html">← Back to Our Story</a>
+        </section>
+    </main>
+
+    <!-- Fullscreen Viewer -->
+    <div class="lightbox" id="lightbox" aria-hidden="true">
+
+        <button class="close" id="closeBtn" aria-label="Close">×</button>
+
+        <button class="prev" id="prevBtn" aria-label="Previous photo">‹</button>
+
+        <div class="lightbox-content">
+            <img id="lightboxImage" src="" alt="Selected memory">
+            <p id="photoCount">1 / 4</p>
+        </div>
+
+        <button class="next" id="nextBtn" aria-label="Next photo">›</button>
+
+    </div>
+
+    <script src="../js/memories.js"></script>
+
+</body>
+</html>
