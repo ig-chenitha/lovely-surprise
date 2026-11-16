@@ -472,3 +472,25 @@ body {
         scroll-behavior: auto !important;
     }
 }
+
+
+/* Surprise-first page unlock styling */
+.nav-links a.page-locked {
+    opacity: .58;
+    cursor: not-allowed;
+}
+.nav-links a.page-locked::after {
+    content: " 🔒";
+    font-size: .78em;
+}
+.unlock-hint {
+    width: fit-content;
+    max-width: calc(100% - 32px);
+    margin: 18px auto;
+    padding: 12px 18px;
+    color: #dce5ff;
+    text-align: center;
+    background: rgba(100, 125, 210, .14);
+    border: 1px solid rgba(190, 207, 255, .2);
+    border-radius: 14px;
+}
