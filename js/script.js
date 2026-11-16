@@ -1,39 +1,57 @@
 (() => {
     "use strict";
+    const button = document.getElementById("surpriseBtn");
+    const message = document.getElementById("message");
+    const hearts = document.getElementById("heartContainer");
+    const loader = document.getElementById("surpriseLoader");
+    const KEY = "chenithaRaveenaSurpriseUnlocked";
+    let busy = false;
 
-    const surpriseButton = document.getElementById("surpriseBtn");
-    const messageCard = document.getElementById("message");
-    const heartContainer = document.getElementById("heartContainer");
-    const UNLOCK_KEY = "chenithaRaveenaSurpriseUnlocked";
+    if (!button || !message) return;
 
-    if (surpriseButton && messageCard) {
-        surpriseButton.addEventListener("click", () => {
-            const isHidden = messageCard.classList.contains("hidden");
-            messageCard.classList.toggle("hidden");
-            surpriseButton.setAttribute("aria-expanded", String(isHidden));
-            surpriseButton.innerHTML = isHidden
-                ? 'Close Your Surprise <span>♡</span>'
-                : 'Open Your Surprise <span>♡</span>';
+    button.addEventListener("click", () => {
+        if (busy) return;
 
-            if (isHidden) {
-                // Unlock every protected page immediately on the first opening.
-                try { localStorage.setItem(UNLOCK_KEY, "yes"); } catch (error) {}
-                window.dispatchEvent(new Event("surpriseUnlocked"));
-                messageCard.scrollIntoView({ behavior: "smooth", block: "center" });
-                createHearts(heartContainer, 12);
+        if (message.classList.contains("hidden")) {
+            busy = true;
+            button.disabled = true;
+            button.setAttribute("aria-expanded", "true");
+
+            if (loader) {
+                loader.classList.add("is-visible");
+                loader.setAttribute("aria-hidden", "false");
             }
-        });
-    }
+
+            // Keep the loading screen visible briefly, then reveal the surprise.
+            window.setTimeout(() => {
+                try { localStorage.setItem(KEY, "yes"); } catch (error) {}
+                window.dispatchEvent(new Event("surpriseUnlocked"));
+                if (loader) {
+                    loader.classList.remove("is-visible");
+                    loader.setAttribute("aria-hidden", "true");
+                }
+                message.classList.remove("hidden");
+                button.innerHTML = 'Close Your Surprise <span>♡</span>';
+                button.disabled = false;
+                busy = false;
+                message.scrollIntoView({ behavior: "smooth", block: "center" });
+                createHearts(hearts, 12);
+            }, 2600);
+        } else {
+            message.classList.add("hidden");
+            button.setAttribute("aria-expanded", "false");
+            button.innerHTML = 'Open Your Surprise <span>♡</span>';
+        }
+    });
 
     function createHearts(container, amount) {
         if (!container) return;
         for (let i = 0; i < amount; i += 1) {
             const heart = document.createElement("span");
             heart.className = "floating-heart";
-            heart.textContent = Math.random() > 0.5 ? "♡" : "♥";
-            heart.style.left = `${Math.random() * 100}%`;
-            heart.style.animationDelay = `${Math.random() * 1.8}s`;
-            heart.style.fontSize = `${14 + Math.random() * 18}px`;
+            heart.textContent = Math.random() > .5 ? "♡" : "♥";
+            heart.style.left = Math.random() * 100 + "%";
+            heart.style.animationDelay = Math.random() * 1.8 + "s";
             container.appendChild(heart);
             heart.addEventListener("animationend", () => heart.remove(), { once: true });
         }
