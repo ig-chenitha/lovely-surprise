@@ -1,72 +1,147 @@
 (() => {
-    "use strict";
+"use strict";
+const SUPABASE_URL = "https://qenobhmetbarxepggocx.supabase.co";
+const SUPABASE_KEY = "sb_publishable_U3jXC6vggzC_bqHJxmAoEA_riJcQh29";
+const ALLOWED = ["raveenagunawardhana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const gallery = document.querySelector(".gallery");
+const authBox = document.getElementById("memoryAuth");
+const uploader = document.getElementById("memoryUploader");
+const loginForm = document.getElementById("memoryLoginForm");
+const authStatus = document.getElementById("memoryAuthStatus");
+const uploadStatus = document.getElementById("memoryUploadStatus");
+const filesInput = document.getElementById("memoryFiles");
+const preview = document.getElementById("memoryPreview");
+const captionInput = document.getElementById("memoryCaption");
+const lightbox = document.getElementById("lightbox");
+const lightboxImage = document.getElementById("lightboxImage");
+const photoCount = document.getElementById("photoCount");
+let allPhotos = [];
+let current = 0;
+let selectedFiles = [];
 
-    const cards = document.querySelectorAll(".photo-card");
-    const lightbox = document.getElementById("lightbox");
-    const lightboxImage = document.getElementById("lightboxImage");
-    const photoCount = document.getElementById("photoCount");
-    const closeBtn = document.getElementById("closeBtn");
-    const nextBtn = document.getElementById("nextBtn");
-    const prevBtn = document.getElementById("prevBtn");
-
-    if (!lightbox || !lightboxImage || !photoCount || !closeBtn || !nextBtn || !prevBtn) return;
-
-    const photos = [
-        "../images/memory1.jpeg",
-        "../images/memory2.jpeg",
-        "../images/memory3.jpeg",
-        "../images/memory4.jpeg"
-    ];
-    let currentIndex = 0;
-    let previousFocus = null;
-
-    function showPhoto(index) {
-        currentIndex = (index + photos.length) % photos.length;
-        lightboxImage.src = photos[currentIndex];
-        photoCount.textContent = `${currentIndex + 1} / ${photos.length}`;
-        lightboxImage.alt = `Memory ${currentIndex + 1} of ${photos.length}`;
-    }
-
-    function openGallery(index) {
-        previousFocus = document.activeElement;
-        showPhoto(index);
-        lightbox.classList.add("active");
-        lightbox.setAttribute("aria-hidden", "false");
-        document.body.style.overflow = "hidden";
-        closeBtn.focus();
-    }
-
-    function closeGallery() {
-        lightbox.classList.remove("active");
-        lightbox.setAttribute("aria-hidden", "true");
-        document.body.style.overflow = "";
-        if (previousFocus && typeof previousFocus.focus === "function") previousFocus.focus();
-    }
-
-    cards.forEach(card => {
-        card.setAttribute("tabindex", "0");
-        card.setAttribute("role", "button");
-        card.addEventListener("click", () => openGallery(Number(card.dataset.index)));
-        card.addEventListener("keydown", event => {
-            if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                openGallery(Number(card.dataset.index));
-            }
-        });
-    });
-
-    nextBtn.addEventListener("click", () => showPhoto(currentIndex + 1));
-    prevBtn.addEventListener("click", () => showPhoto(currentIndex - 1));
-    closeBtn.addEventListener("click", closeGallery);
-
-    lightbox.addEventListener("click", event => {
-        if (event.target === lightbox) closeGallery();
-    });
-
-    document.addEventListener("keydown", event => {
-        if (!lightbox.classList.contains("active")) return;
-        if (event.key === "Escape") closeGallery();
-        if (event.key === "ArrowRight") showPhoto(currentIndex + 1);
-        if (event.key === "ArrowLeft") showPhoto(currentIndex - 1);
-    });
+const say = (el, msg) => { if (el) el.textContent = msg; };
+function protectImage(img) {
+  img.draggable = false;
+  img.addEventListener("contextmenu", e => e.preventDefault());
+  img.addEventListener("dragstart", e => e.preventDefault());
+}
+document.addEventListener("contextmenu", e => {
+  if (e.target.closest(".gallery, .lightbox")) e.preventDefault();
+});
+document.addEventListener("dragstart", e => {
+  if (e.target.closest(".gallery, .lightbox")) e.preventDefault();
+});
+document.addEventListener("copy", e => {
+  if (e.target.closest?.(".gallery, .lightbox")) e.preventDefault();
+});
+function openLightbox(index) {
+  current = index;
+  const photo = allPhotos[current];
+  if (!photo) return;
+  lightboxImage.src = photo.url;
+  lightboxImage.alt = photo.caption || "Our memory";
+  photoCount.textContent = (current + 1) + " / " + allPhotos.length;
+  lightbox.classList.add("active");
+  lightbox.setAttribute("aria-hidden","false");
+  document.body.style.overflow = "hidden";
+}
+function closeLightbox() {
+  lightbox.classList.remove("active");
+  lightbox.setAttribute("aria-hidden","true");
+  document.body.style.overflow = "";
+}
+function renderGallery(uploaded) {
+  const originals = Array.from(gallery.querySelectorAll(".photo-card")).map(card => ({
+    url: card.querySelector("img")?.getAttribute("src"),
+    caption: card.querySelector("h2")?.textContent || "",
+    label: card.querySelector("span")?.textContent || "MEMORY"
+  })).filter(x => x.url);
+  allPhotos = [...uploaded.map(x => ({...x, label:"NEW MEMORY"})), ...originals];
+  gallery.innerHTML = "";
+  allPhotos.forEach((photo, index) => {
+    const card = document.createElement("article");
+    card.className = "photo-card";
+    card.dataset.index = index;
+    const img = document.createElement("img");
+    img.src = photo.url; img.alt = photo.caption || "Our memory";
+    img.loading = "lazy"; img.decoding = "async"; protectImage(img);
+    const cap = document.createElement("div"); cap.className = "photo-caption";
+    const label = document.createElement("span"); label.textContent = photo.label || "MEMORY";
+    const title = document.createElement("h2"); title.textContent = photo.caption || "A Beautiful Moment ♡";
+    cap.append(label,title); card.append(img,cap);
+    card.tabIndex = 0; card.setAttribute("role","button");
+    card.addEventListener("click",()=>openLightbox(index));
+    card.addEventListener("keydown",e=>{if(e.key==="Enter"||e.key===" "){e.preventDefault();openLightbox(index);}});
+    gallery.append(card);
+  });
+}
+async function loadMemories() {
+  const {data,error}=await client.from("memories_uploads").select("*").order("created_at",{ascending:false});
+  if(error){console.error(error);return;}
+  const uploaded=(data||[]).map(row=>({
+    url:client.storage.from("lovely-memories").getPublicUrl(row.object_path).data.publicUrl,
+    caption:row.caption, label:"SHARED MEMORY", id:row.id
+  }));
+  renderGallery(uploaded);
+}
+function setSession(session) {
+  const email=session?.user?.email?.toLowerCase();
+  const allowed=!!email && ALLOWED.includes(email);
+  authBox.hidden=allowed;
+  uploader.hidden=!allowed;
+  if(allowed) say(document.getElementById("memorySignedIn"),"Signed in as "+email+" · Your shared gallery");
+}
+client.auth.onAuthStateChange((_event,session)=>setSession(session));
+client.auth.getSession().then(({data})=>setSession(data.session));
+loginForm.addEventListener("submit",async e=>{
+ e.preventDefault(); say(authStatus,"Signing in...");
+ const email=document.getElementById("memoryEmail").value.trim().toLowerCase();
+ if(!ALLOWED.includes(email)){say(authStatus,"This email is not approved for uploads.");return;}
+ const password=document.getElementById("memoryPassword").value;
+ const {error}=await client.auth.signInWithPassword({email,password});
+ say(authStatus,error?error.message:"Signed in successfully ♡");
+});
+document.getElementById("memorySignup").addEventListener("click",async()=>{
+ const email=document.getElementById("memoryEmail").value.trim().toLowerCase();
+ const password=document.getElementById("memoryPassword").value;
+ if(!ALLOWED.includes(email)){say(authStatus,"Use one of the two partner email addresses.");return;}
+ if(password.length<8){say(authStatus,"Choose a password with at least 8 characters.");return;}
+ say(authStatus,"Creating account...");
+ const {error}=await client.auth.signUp({email,password});
+ say(authStatus,error?error.message:"Check your email to confirm the account, then log in here. ♡");
+});
+document.getElementById("memoryLogout").addEventListener("click",async()=>{await client.auth.signOut();});
+filesInput.addEventListener("change",()=>{
+ selectedFiles=Array.from(filesInput.files||[]);
+ preview.innerHTML="";
+ selectedFiles.forEach(file=>{
+  const url=URL.createObjectURL(file);const img=document.createElement("img");img.src=url;img.alt=file.name;protectImage(img);preview.append(img);
+ });
+});
+document.getElementById("memoryUploadBtn").addEventListener("click",async()=>{
+ const {data:{session}}=await client.auth.getSession();
+ if(!session||!ALLOWED.includes(session.user.email.toLowerCase())){say(uploadStatus,"Please sign in with an approved partner account.");return;}
+ if(!selectedFiles.length){say(uploadStatus,"Choose at least one photo first.");return;}
+ const button=document.getElementById("memoryUploadBtn");button.disabled=true;
+ let done=0;
+ for(const file of selectedFiles){
+  if(!/^image\/(jpeg|png|webp|gif)$/.test(file.type)||file.size>10*1024*1024){say(uploadStatus,"Skipped "+file.name+" (use JPG, PNG, WEBP or GIF under 10 MB).");continue;}
+  const path=session.user.id+"/"+Date.now()+"-"+crypto.randomUUID()+"-"+file.name.replace(/[^a-zA-Z0-9._-]/g,"_");
+  const {error:upErr}=await client.storage.from("lovely-memories").upload(path,file,{contentType:file.type,upsert:false});
+  if(upErr){say(uploadStatus,"Upload failed: "+upErr.message);continue;}
+  const {error:dbErr}=await client.from("memories_uploads").insert({object_path:path,caption:captionInput.value.trim(),uploaded_by:session.user.email.toLowerCase()});
+  if(dbErr){await client.storage.from("lovely-memories").remove([path]);say(uploadStatus,"Could not save photo details: "+dbErr.message);continue;}
+  done++;
+ }
+ say(uploadStatus,done+" photo(s) added to your shared memories ♡");
+ selectedFiles=[];filesInput.value="";preview.innerHTML="";captionInput.value="";
+ button.disabled=false;await loadMemories();
+});
+document.getElementById("nextBtn").addEventListener("click",()=>openLightbox((current+1)%allPhotos.length));
+document.getElementById("prevBtn").addEventListener("click",()=>openLightbox((current-1+allPhotos.length)%allPhotos.length));
+document.getElementById("closeBtn").addEventListener("click",closeLightbox);
+lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
+document.addEventListener("keydown",e=>{if(!lightbox.classList.contains("active"))return;if(e.key==="Escape")closeLightbox();if(e.key==="ArrowRight")openLightbox((current+1)%allPhotos.length);if(e.key==="ArrowLeft")openLightbox((current-1+allPhotos.length)%allPhotos.length);});
+loadMemories();
 })();
