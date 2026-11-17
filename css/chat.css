@@ -1,6 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/Outfit-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
 /* Floating liquid-glass chat widget */
-#lovelyChatWidget{position:fixed;right:24px;bottom:24px;z-index:10050;font-family:'Manrope',sans-serif}
+#lovelyChatWidget{position:fixed;right:24px;bottom:24px;z-index:10050;font-family:'Outfit',sans-serif}
 #lovelyChatWidget .lc-launcher{position:relative;width:62px;height:62px;border:1px solid rgba(255,255,255,.38);border-radius:50%;display:grid;place-items:center;color:#fff;font-size:32px;cursor:pointer;background:linear-gradient(145deg,rgba(226,165,215,.38),rgba(105,128,205,.3)),rgba(17,23,45,.72);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:0 10px 34px #0008,inset 0 1px 1px #ffffff65;transition:transform .3s,box-shadow .3s;overflow:hidden}
 #lovelyChatWidget .lc-launcher:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 14px 42px #0009,0 0 24px #d99bdb55}
 #lovelyChatWidget .lc-launcher-heart{position:relative;z-index:2;animation:lc-heartbeat 2.5s ease-in-out infinite}
@@ -9,7 +16,7 @@
 #lovelyChatWidget .lc-panel.is-open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
 #lovelyChatWidget .lc-head{position:relative;z-index:1;display:flex;justify-content:space-between;align-items:flex-start;padding:20px 19px 15px;border-bottom:1px solid #ffffff20;background:linear-gradient(110deg,#e3a4d31c,#8fa9f51a)}
 #lovelyChatWidget .lc-eyebrow{font-size:9px;letter-spacing:2.5px;color:#e8c8e8}
-#lovelyChatWidget .lc-head h2{font-family:Georgia,serif;font-size:22px;font-weight:500;color:#fff;margin:7px 0 4px}
+#lovelyChatWidget .lc-head h2{font-family: 'Outfit', sans-serif;font-size:22px;font-weight:500;color:#fff;margin:7px 0 4px}
 #lovelyChatWidget .lc-head h2 i{color:#f1b6db}
 #lovelyChatWidget .lc-head p{margin:0;color:#c7c5d7;font-size:11px}
 #lovelyChatWidget .lc-close{width:32px;height:32px;border-radius:50%;border:1px solid #ffffff30;background:#ffffff12;color:white;font-size:23px;line-height:1;cursor:pointer}
