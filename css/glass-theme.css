@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 /* ==========================================
    LOVELY SURPRISE - UNIVERSAL GLASS THEME
@@ -1073,3 +1074,6 @@ body::after,
         font-size: 11px;
     }
 }
+
+/* Consistent typography across shared glass UI and form controls */
+body, button, input, textarea, select { font-family: 'Manrope', sans-serif; }
