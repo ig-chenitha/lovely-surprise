@@ -24,7 +24,7 @@
 
             // Keep the loading screen visible briefly, then reveal the surprise.
             window.setTimeout(() => {
-                try { sessionStorage.setItem(KEY, "yes"); } catch (error) {}
+                try { localStorage.setItem(KEY, "yes"); } catch (error) {}
                 window.dispatchEvent(new Event("surpriseUnlocked"));
                 if (loader) {
                     loader.classList.remove("is-visible");
