@@ -27,8 +27,21 @@
     }, { once: true });
   }
 
-  const interval = window.setInterval(addParticle, 1800);
+  let interval = null;
+  function startParticles() {
+    if (interval === null && !document.hidden) {
+      interval = window.setInterval(addParticle, 1800);
+    }
+  }
+  function stopParticles() {
+    if (interval !== null) {
+      window.clearInterval(interval);
+      interval = null;
+    }
+  }
   document.addEventListener("visibilitychange", () => {
-    if (document.hidden) window.clearInterval(interval);
-  }, { once: true });
+    if (document.hidden) stopParticles();
+    else startParticles();
+  });
+  startParticles();
 })();
