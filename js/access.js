@@ -2,7 +2,7 @@
   "use strict";
   const KEY = "chenithaRaveenaSurpriseUnlocked";
   const isUnlocked = () => {
-    try { return sessionStorage.getItem(KEY) === "yes"; }
+    try { return localStorage.getItem(KEY) === "yes"; }
     catch (error) { return false; }
   };
   const path = location.pathname;
