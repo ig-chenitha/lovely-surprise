@@ -38,12 +38,13 @@ overlay.innerHTML=`
   </div>
  </div>`;
 document.body.prepend(overlay);
+root.classList.remove("site-entry-loading");
 const $=id=>document.getElementById(id);
 let mode="login";
 function status(t){$("siteAuthStatus").textContent=t||"";}
 function partnerName(user){
  const email=(user.email||"").toLowerCase();
- if(email==="raveenagunawardhana2007@gmail.com") return "THRA BABA";
+ if(email==="raveenagunawardhana2007@gmail.com") return "THRA BBA";
  if(email==="chenithakodithuwakku000@gmail.com") return "BUNO";
  return user.user_metadata?.display_name || "Friend";
 }
@@ -51,7 +52,7 @@ function showProfile(user){
  $("siteAuthForm").hidden=true;$("siteAuthActions").hidden=true;$("siteProfile").hidden=false;
  const name=partnerName(user);
  $("siteAuthTitle").textContent="Hey "+name+"! ♡";
- $("siteAuthIntro").textContent="Your little surprise is ready. Welcome to our little universe.";
+ $("siteAuthIntro").textContent="Are you ready for the surprise? ♡";
  $("siteProfileName").textContent=name;
  $("siteProfileEmail").textContent=user.email;
  const avatar=user.user_metadata?.avatar_url;
@@ -59,17 +60,13 @@ function showProfile(user){
  $("siteProfileAvatar").style.backgroundImage=avatar?'url("'+avatar+'")':"";
  $("siteProfileAvatar").style.backgroundSize="cover";
  $("siteProfileAvatar").style.backgroundPosition="center";
- $("siteEnter").textContent="Enter Your Little Universe ♡";
+ $("siteEnter").textContent="YES, I\'M READY ♡";
 }
 function showForm(){
  $("siteAuthForm").hidden=false;$("siteAuthActions").hidden=false;$("siteProfile").hidden=true;
 }
 async function enter(user){
- const name=partnerName(user);
- const gate=document.getElementById("visitorGate");
  const loader=document.getElementById("surpriseLoader");
- if(gate){gate.classList.remove("gate-leaving");gate.style.display="none";}
- root.classList.remove("visitor-gate-active");
  enterNavChip(user);
  overlay.classList.add("site-auth-exit");
  if(loader){loader.classList.add("is-visible");loader.setAttribute("aria-hidden","false");}
