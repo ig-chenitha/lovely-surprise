@@ -4,7 +4,7 @@
     const message = document.getElementById("message");
     const hearts = document.getElementById("heartContainer");
     const loader = document.getElementById("surpriseLoader");
-    const KEY = "chenithaRaveenaSurpriseUnlocked";
+    const KEY = "chenithaRaveenaSurpriseUnlockedV2";
     let busy = false;
 
     if (!button || !message) return;
