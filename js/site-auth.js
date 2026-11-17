@@ -143,13 +143,33 @@ $("siteEnter").addEventListener("click",async()=>{
  const {data}=await client.auth.getUser();if(data.user)enter(data.user);
 });
 $("siteLogout").addEventListener("click",async()=>{await client.auth.signOut();try{localStorage.removeItem("chenithaRaveenaSurpriseUnlocked");}catch(e){}window.location.replace(location.pathname.includes("/pages/")?"../index.html":"index.html");});
+// Remember an intentional click on the Home link. This lets normal navigation
+// return home without reopening login; a browser refresh has no marker and asks for login.
+document.addEventListener("click",event=>{
+ const link=event.target.closest("a[href]");
+ if(!link)return;
+ const target=new URL(link.href,location.href);
+ const isHome=target.origin===location.origin &&
+   (target.pathname==="/" || target.pathname.endsWith("/index.html"));
+ if(isHome){
+  try{sessionStorage.setItem("lovelyHomeNavigation","1");}catch(e){}
+ }
+},true);
+
 function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
   if(timeout){status("Connection is taking too long. Please try logging in again.");return;}
   if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase())){
    const isHomePage=!location.pathname.includes("/pages/") && (location.pathname.endsWith("/") || location.pathname.endsWith("/index.html"));
-   if(isHomePage) showForm();
+   let cameFromHomeClick=false;
+   if(isHomePage){
+    try{
+     cameFromHomeClick=sessionStorage.getItem("lovelyHomeNavigation")==="1";
+     sessionStorage.removeItem("lovelyHomeNavigation");
+    }catch(e){}
+   }
+   if(isHomePage && !cameFromHomeClick) showForm();
    else enter(data.session.user,false);
   } else if(data.session)client.auth.signOut();
  });
