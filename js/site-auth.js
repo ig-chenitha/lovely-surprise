@@ -65,16 +65,21 @@ function showProfile(user){
 function showForm(){
  $("siteAuthForm").hidden=false;$("siteAuthActions").hidden=false;$("siteProfile").hidden=true;
 }
-async function enter(user){
+async function enter(user, showLoader=true){
  const loader=document.getElementById("surpriseLoader");
  enterNavChip(user);
  overlay.classList.add("site-auth-exit");
- if(loader){loader.classList.add("is-visible");loader.setAttribute("aria-hidden","false");}
- setTimeout(()=>{
+ const finish=()=>{
   root.classList.remove("site-auth-active");
   overlay.remove();
   if(loader){loader.classList.remove("is-visible");loader.setAttribute("aria-hidden","true");}
- },1300);
+ };
+ if(showLoader && loader){
+  loader.classList.add("is-visible");
+  loader.setAttribute("aria-hidden","false");
+ }
+ if(showLoader) setTimeout(finish,1300);
+ else finish();
 }
 $("siteCreate").addEventListener("click",()=>{
  if(mode==="login"){
@@ -142,7 +147,7 @@ function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
   if(timeout){status("Connection is taking too long. Please try logging in again.");return;}
-  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user);
+  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user,false);
   else if(data.session)client.auth.signOut();
  });
 }
