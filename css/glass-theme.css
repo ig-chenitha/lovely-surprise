@@ -932,3 +932,58 @@ body::before {
         backdrop-filter: blur(9px) saturate(125%) !important;
     }
 }
+
+
+/* Final performance pass: preserve the translucent midnight-glass style
+   without stacking multiple heavy blur filters across the page. */
+.site-nav,
+.countdown-card,
+.photo-card,
+.moment,
+.message-card,
+.letter-card,
+.unlock-hint,
+.surprise-btn,
+.open-button {
+  -webkit-backdrop-filter: blur(7px) saturate(120%) !important;
+  backdrop-filter: blur(7px) saturate(120%) !important;
+}
+.surprise-loader,
+.loader-glass,
+.visitor-gate,
+.visitor-gate-card,
+#siteAuthOverlay,
+.site-auth-overlay {
+  -webkit-backdrop-filter: blur(9px) saturate(125%) !important;
+  backdrop-filter: blur(9px) saturate(125%) !important;
+}
+body {
+  background-attachment: scroll !important;
+}
+body::before,
+body::after,
+.stars {
+  animation: none !important;
+}
+@media (max-width: 650px) {
+  .site-nav,
+  .countdown-card,
+  .photo-card,
+  .moment,
+  .message-card,
+  .letter-card,
+  .unlock-hint,
+  .surprise-btn,
+  .open-button {
+    -webkit-backdrop-filter: blur(5px) saturate(115%) !important;
+    backdrop-filter: blur(5px) saturate(115%) !important;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  body::before,
+  body::after,
+  .stars,
+  .love-particle {
+    animation: none !important;
+  }
+}
