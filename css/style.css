@@ -1,4 +1,10 @@
-@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+@font-face {
+  font-family: 'Outfit';
+  src: url('../fonts/Outfit-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
 
 /* =====================================
    CHENITHA & RAVEENA
@@ -21,7 +27,7 @@ body {
     background:
         radial-gradient(ellipse at 50% 45%, #101d49 0%, #080d23 45%, #03050f 100%);
     color: #ffffff;
-    font-family: 'Manrope', sans-serif;
+    font-family: 'Outfit', sans-serif;
     display: flex;
     flex-direction: column;
     align-items: center;
