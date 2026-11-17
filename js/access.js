@@ -13,6 +13,28 @@
     return;
   }
 
+  // Warm the next page in the background when a visitor points to a navigation link.
+  // This keeps normal page navigation intact while allowing the browser to reuse cached files.
+  const prefetched = new Set();
+  function warmPage(link) {
+    if (!link || !isUnlocked()) return;
+    const url = new URL(link.href, location.href);
+    if (url.origin !== location.origin || prefetched.has(url.href)) return;
+    prefetched.add(url.href);
+    const hint = document.createElement("link");
+    hint.rel = "prefetch";
+    hint.href = url.href;
+    document.head.appendChild(hint);
+  }
+  document.addEventListener("pointerover", event => {
+    const link = event.target.closest('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]');
+    if (link) warmPage(link);
+  });
+  document.addEventListener("focusin", event => {
+    const link = event.target.closest('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]');
+    if (link) warmPage(link);
+  });
+
   function refreshLocks() {
     const unlocked = isUnlocked();
     document.querySelectorAll('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]').forEach(link => {
