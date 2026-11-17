@@ -869,7 +869,8 @@ body::after {
 @media(max-width:600px){.site-auth-card{padding:28px 20px}.site-profile-chip{font-size:11px;padding:7px 10px}}
 
 /* Prevent page flash before the shared sign-in overlay loads */
-html.site-auth-active body > :not(#siteAuthOverlay) { visibility: hidden !important; }
+html.site-auth-active body > :not(#siteAuthOverlay):not(#surpriseLoader) { visibility: hidden !important; }
+html.site-auth-active #surpriseLoader.is-visible { visibility: visible !important; opacity: 1 !important; pointer-events: auto !important; }
 html.site-auth-active #siteAuthOverlay { visibility: visible !important; }
 
 .site-profile-avatar{background-size:cover;background-position:center;overflow:hidden}
