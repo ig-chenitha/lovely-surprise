@@ -164,10 +164,14 @@ function startAuth(){
    const isHomePage=!location.pathname.includes("/pages/") && (location.pathname.endsWith("/") || location.pathname.endsWith("/index.html"));
    let cameFromHomeClick=false;
    if(isHomePage){
-    try{
-     cameFromHomeClick=sessionStorage.getItem("lovelyHomeNavigation")==="1";
-     sessionStorage.removeItem("lovelyHomeNavigation");
-    }catch(e){}
+    const params=new URLSearchParams(location.search);
+    cameFromHomeClick=params.get("nav")==="1";
+    if(cameFromHomeClick){
+     params.delete("nav");
+     const cleanUrl=location.pathname+(params.toString()?"?"+params.toString():"")+location.hash;
+     history.replaceState({}, "", cleanUrl);
+    }
+    try{sessionStorage.removeItem("lovelyHomeNavigation");}catch(e){}
    }
    if(isHomePage && !cameFromHomeClick) showForm();
    else enter(data.session.user,false);
