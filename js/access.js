@@ -53,13 +53,16 @@
     const link = event.target.closest('a[href*="story.html"], a[href*="memories.html"], a[href*="letter.html"]');
     if (link && !isUnlocked()) {
       event.preventDefault();
-      const message = document.getElementById("message");
       const button = document.getElementById("surpriseBtn");
-      if (message) {
-        message.classList.remove("hidden");
-        message.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (!isHome) {
+        // Send visitors back to the home page and bring the unlock button into view.
+        location.href = new URL("../index.html#surpriseBtn", location.href).href;
+        return;
       }
-      if (button) button.focus();
+      if (button) {
+        button.scrollIntoView({ behavior: "smooth", block: "center" });
+        button.focus({ preventScroll: true });
+      }
     }
   });
 
