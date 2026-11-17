@@ -1,13 +1,4 @@
-
-@import url('https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap');
-
-@font-face {
-    font-family: 'Outfit';
-    src: url('../fonts/Outfit-Medium.ttf') format('truetype');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 
 :root {
     --blue: #779cff;
@@ -33,7 +24,7 @@ body {
     background:
         radial-gradient(ellipse at 50% 35%, #172957 0%, #080e24 48%, #03050f 100%);
     color: white;
-    font-family: 'Outfit', sans-serif;
+    font-family: 'Manrope', sans-serif;
 }
 
 /* BACKGROUND */
@@ -452,7 +443,7 @@ body {
 .paper-content h2 {
     margin: 15px 0 28px;
     color: #29365a;
-    font-family: 'Great Vibes', cursive;
+    font-family: 'Manrope', sans-serif;
     font-size: 43px;
     font-weight: 400;
 }
@@ -487,7 +478,7 @@ body {
     display: block;
     margin-top: 7px;
     color: #3d4f7d;
-    font-family: 'Great Vibes', cursive;
+    font-family: 'Manrope', sans-serif;
     font-size: 34px;
     font-weight: 400;
 }
