@@ -1,5 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
 /* Floating liquid-glass chat widget */
-#lovelyChatWidget{position:fixed;right:24px;bottom:24px;z-index:10050;font-family:inherit}
+#lovelyChatWidget{position:fixed;right:24px;bottom:24px;z-index:10050;font-family:'Manrope',sans-serif}
 #lovelyChatWidget .lc-launcher{position:relative;width:62px;height:62px;border:1px solid rgba(255,255,255,.38);border-radius:50%;display:grid;place-items:center;color:#fff;font-size:32px;cursor:pointer;background:linear-gradient(145deg,rgba(226,165,215,.38),rgba(105,128,205,.3)),rgba(17,23,45,.72);backdrop-filter:blur(24px) saturate(180%);-webkit-backdrop-filter:blur(24px) saturate(180%);box-shadow:0 10px 34px #0008,inset 0 1px 1px #ffffff65;transition:transform .3s,box-shadow .3s;overflow:hidden}
 #lovelyChatWidget .lc-launcher:hover{transform:translateY(-4px) scale(1.04);box-shadow:0 14px 42px #0009,0 0 24px #d99bdb55}
 #lovelyChatWidget .lc-launcher-heart{position:relative;z-index:2;animation:lc-heartbeat 2.5s ease-in-out infinite}
