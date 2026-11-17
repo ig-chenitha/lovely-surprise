@@ -7,7 +7,7 @@ let client = (window.supabase && typeof window.supabase.createClient === "functi
   ? window.supabase.createClient(URL,KEY) : null;
 root.classList.add("site-auth-active");
 const style=document.createElement("style");
-style.textContent="html.site-auth-active body>*:not(#siteAuthOverlay){visibility:hidden!important}#siteAuthOverlay{visibility:visible!important}";
+style.textContent="html.site-auth-active body>*:not(#siteAuthOverlay):not(#surpriseLoader){visibility:hidden!important}#siteAuthOverlay{visibility:visible!important}html.site-auth-active #surpriseLoader.is-visible{visibility:visible!important;opacity:1!important;pointer-events:auto!important}";
 document.head.append(style);
 const overlay=document.createElement("section");
 overlay.id="siteAuthOverlay";overlay.className="site-auth-overlay";
