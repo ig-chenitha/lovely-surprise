@@ -877,3 +877,57 @@ html.site-auth-active #siteAuthOverlay { visibility: visible !important; }
 .site-profile-chip{display:inline-flex!important;align-items:center;gap:8px;white-space:nowrap}
 .site-profile-chip-photo{width:27px;height:27px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.5)}
 .site-profile-chip span{display:inline-block}
+
+
+/* Stability pass: preserve the liquid-glass appearance without freezing
+   slower devices during page entry, scrolling, or overlay transitions. */
+.site-nav,
+.countdown-card,
+.photo-card,
+.moment,
+.message-card,
+.letter-card,
+.unlock-hint,
+.surprise-btn,
+.open-button {
+    -webkit-backdrop-filter: blur(12px) saturate(145%) !important;
+    backdrop-filter: blur(12px) saturate(145%) !important;
+}
+
+.surprise-loader {
+    -webkit-backdrop-filter: blur(14px) saturate(135%) !important;
+    backdrop-filter: blur(14px) saturate(135%) !important;
+}
+
+.loader-glass,
+.visitor-gate-card,
+.site-auth-card {
+    -webkit-backdrop-filter: blur(16px) saturate(135%) !important;
+    backdrop-filter: blur(16px) saturate(135%) !important;
+}
+
+.site-auth-overlay,
+.visitor-gate {
+    -webkit-backdrop-filter: blur(14px) saturate(130%) !important;
+    backdrop-filter: blur(14px) saturate(130%) !important;
+}
+
+/* Keep the star texture, but avoid an endless full-screen repaint. */
+body::before {
+    animation: none !important;
+}
+
+@media (max-width: 650px) {
+    .site-nav,
+    .countdown-card,
+    .photo-card,
+    .moment,
+    .message-card,
+    .letter-card,
+    .unlock-hint,
+    .surprise-btn,
+    .open-button {
+        -webkit-backdrop-filter: blur(9px) saturate(125%) !important;
+        backdrop-filter: blur(9px) saturate(125%) !important;
+    }
+}
