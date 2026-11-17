@@ -3,8 +3,14 @@
 const SUPABASE_URL = "https://jdandkmbnkeubxmzmjef.supabase.co";
 const SUPABASE_KEY = "sb_publishable_ei8L_sMkm65kNoNNQ7vpcg_lEL6vQOU";
 const ALLOWED = ["raveenagunawardhana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
-const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const gallery = document.querySelector(".gallery");
+if (!window.supabase || typeof window.supabase.createClient !== "function") {
+  const status = document.getElementById("memoryAuthStatus");
+  if (status) status.textContent = "The secure gallery service did not load. Check your connection and refresh this page.";
+  if (gallery) gallery.setAttribute("aria-busy", "false");
+  return;
+}
+const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 const authBox = document.getElementById("memoryAuth");
 const uploader = document.getElementById("memoryUploader");
 const loginForm = document.getElementById("memoryLoginForm");
@@ -98,13 +104,23 @@ function renderGallery(uploaded) {
   });
 }
 async function loadMemories() {
+  if (gallery) gallery.setAttribute("aria-busy", "true");
   const {data,error}=await client.from("memories_uploads").select("*").order("created_at",{ascending:false});
-  if(error){console.error(error);return;}
+  if(error){
+    console.error("Could not load shared memories:", error);
+    let notice=document.getElementById("memoryLoadStatus");
+    if(!notice){notice=document.createElement("p");notice.id="memoryLoadStatus";notice.className="memory-status";gallery?.before(notice);}
+    notice.textContent="Shared memories could not be loaded right now. Please refresh and try again.";
+    if (gallery) gallery.setAttribute("aria-busy", "false");
+    return;
+  }
+  const oldNotice=document.getElementById("memoryLoadStatus"); if(oldNotice) oldNotice.remove();
   const uploaded=(data||[]).map(row=>({
     url:client.storage.from("lovely-memories").getPublicUrl(row.object_path).data.publicUrl,
     caption:row.caption, label:"SHARED MEMORY", id:row.id, object_path:row.object_path
   }));
   renderGallery(uploaded);
+  if (gallery) gallery.setAttribute("aria-busy", "false");
 }
 function setSession(session) {
   const email=session?.user?.email?.toLowerCase();
@@ -164,5 +180,5 @@ document.getElementById("prevBtn").addEventListener("click",()=>openLightbox((cu
 document.getElementById("closeBtn").addEventListener("click",closeLightbox);
 lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
 document.addEventListener("keydown",e=>{if(!lightbox.classList.contains("active"))return;if(e.key==="Escape")closeLightbox();if(e.key==="ArrowRight")openLightbox((current+1)%allPhotos.length);if(e.key==="ArrowLeft")openLightbox((current-1+allPhotos.length)%allPhotos.length);});
-loadMemories();
+loadMemories().catch(error => { console.error(error); if (gallery) gallery.setAttribute("aria-busy", "false"); const s=document.getElementById("memoryLoadStatus"); if(s) s.textContent="Could not connect to shared memories. Please refresh and try again."; });
 })();
