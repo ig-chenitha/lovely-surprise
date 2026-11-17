@@ -147,8 +147,11 @@ function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
   if(timeout){status("Connection is taking too long. Please try logging in again.");return;}
-  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))showProfile(data.session.user);
-  else if(data.session)client.auth.signOut();
+  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase())){
+   const isHomePage=!location.pathname.includes("/pages/") && (location.pathname.endsWith("/") || location.pathname.endsWith("/index.html"));
+   if(isHomePage) showForm();
+   else enter(data.session.user,false);
+  } else if(data.session)client.auth.signOut();
  });
 }
 if(client){startAuth();}
