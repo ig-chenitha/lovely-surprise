@@ -60,7 +60,7 @@ function showProfile(user){
  $("siteProfileAvatar").style.backgroundImage=avatar?'url("'+avatar+'")':"";
  $("siteProfileAvatar").style.backgroundSize="cover";
  $("siteProfileAvatar").style.backgroundPosition="center";
- $("siteEnter").textContent="YES, I\'M READY ♡";
+ $("siteEnter").textContent="ENTER OUR WEBSITE ♡";
 }
 function showForm(){
  $("siteAuthForm").hidden=false;$("siteAuthActions").hidden=false;$("siteProfile").hidden=true;
@@ -147,7 +147,7 @@ function startAuth(){
  if(!client){status("Unable to connect securely. Please refresh this page.");return;}
  Promise.race([client.auth.getSession(),new Promise(resolve=>setTimeout(()=>resolve({data:{session:null},timeout:true}),7000))]).then(({data,timeout})=>{
   if(timeout){status("Connection is taking too long. Please try logging in again.");return;}
-  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))enter(data.session.user,false);
+  if(data.session&&ALLOWED.includes(data.session.user.email.toLowerCase()))showProfile(data.session.user);
   else if(data.session)client.auth.signOut();
  });
 }
