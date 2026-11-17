@@ -1,6 +1,6 @@
 (() => {
   "use strict";
-  const KEY = "chenithaRaveenaSurpriseUnlocked";
+  const KEY = "chenithaRaveenaSurpriseUnlockedV2";
   const isUnlocked = () => {
     try { return localStorage.getItem(KEY) === "yes"; }
     catch (error) { return false; }
