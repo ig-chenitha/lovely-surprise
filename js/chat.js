@@ -1,6 +1,6 @@
 (()=>{"use strict";
-const SUPABASE_URL="https://jdandkmbnkeubxmzmjef.supabase.co",SUPABASE_KEY="sb_publishable_ei8L_Smkm65kNoNNQ7vpcg_lEL6vQOU",ALLOWED=["raveenagunawardhana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
-const name=email=>email.toLowerCase()==="raveenagunawardhana2007@gmail.com"?"Raveena":"Chenitha";
+const SUPABASE_URL="https://jdandkmbnkeubxmzmjef.supabase.co",SUPABASE_KEY="sb_publishable_ei8L_Smkm65kNoNNQ7vpcg_lEL6vQOU",ALLOWED=["raveenagunawardana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
+const name=email=>email.toLowerCase()==="raveenagunawardana2007@gmail.com"?"Raveena":"Chenitha";
 function build(){
  if(document.getElementById("lovelyChatWidget"))return;
  const root=document.createElement("div");root.id="lovelyChatWidget";root.innerHTML=`
