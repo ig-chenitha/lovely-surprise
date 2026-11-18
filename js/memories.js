@@ -2,7 +2,7 @@
 "use strict";
 const SUPABASE_URL = "https://jdandkmbnkeubxmzmjef.supabase.co";
 const SUPABASE_KEY = "sb_publishable_ei8L_sMkm65kNoNNQ7vpcg_lEL6vQOU";
-const ALLOWED = ["raveenagunawardhana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
+const ALLOWED = ["raveenagunawardana2007@gmail.com","chenithakodithuwakku000@gmail.com"];
 const gallery = document.querySelector(".gallery");
 if (!window.supabase || typeof window.supabase.createClient !== "function") {
   const status = document.getElementById("memoryAuthStatus");
