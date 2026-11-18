@@ -1,7 +1,7 @@
 (() => {
 "use strict";
 const URL="https://jdandkmbnkeubxmzmjef.supabase.co", KEY="sb_publishable_ei8L_sMkm65kNoNNQ7vpcg_lEL6vQOU";
-const ALLOWED=["chenithakodithuwakku000@gmail.com","raveenagunawardhana2007@gmail.com"];
+const ALLOWED=["chenithakodithuwakku000@gmail.com","raveenagunawardana2007@gmail.com"];
 const root=document.documentElement;
 let client = (window.supabase && typeof window.supabase.createClient === "function")
   ? window.supabase.createClient(URL,KEY) : null;
@@ -44,7 +44,7 @@ let mode="login";
 function status(t){$("siteAuthStatus").textContent=t||"";}
 function partnerName(user){
  const email=(user.email||"").toLowerCase();
- if(email==="raveenagunawardhana2007@gmail.com") return "THRA BBA";
+ if(email==="raveenagunawardana2007@gmail.com") return "THRA BBA";
  if(email==="chenithakodithuwakku000@gmail.com") return "BUNO";
  return user.user_metadata?.display_name || "Friend";
 }
