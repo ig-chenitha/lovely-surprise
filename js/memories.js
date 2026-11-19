@@ -129,8 +129,35 @@ function setSession(session) {
   uploader.hidden=!allowed;
   if(allowed) say(document.getElementById("memorySignedIn"),"Signed in as "+email+" · Your shared gallery");
 }
-client.auth.onAuthStateChange((_event,session)=>setSession(session));
-client.auth.getSession().then(({data})=>setSession(data.session));
+let loadedUserId = "";
+async function refreshForSession(session) {
+  const email = session?.user?.email?.toLowerCase();
+  const userId = session?.user?.id;
+  if (!email || !userId || !ALLOWED.includes(email)) {
+    loadedUserId = "";
+    return;
+  }
+  if (loadedUserId === userId) return;
+  loadedUserId = userId;
+  try {
+    await loadMemories();
+  } catch (error) {
+    loadedUserId = "";
+    console.error("Could not refresh shared memories:", error);
+  }
+}
+client.auth.onAuthStateChange((event,session)=>{
+  setSession(session);
+  if (event === "SIGNED_IN") refreshForSession(session);
+});
+client.auth.getSession().then(({data,error})=>{
+  if (error) say(authStatus,error.message);
+  setSession(data.session);
+  refreshForSession(data.session);
+}).catch(error=>{
+  say(authStatus,"Could not restore your login session. Please refresh and try again.");
+  console.error("Could not restore auth session:",error);
+});
 loginForm.addEventListener("submit",async e=>{
  e.preventDefault(); say(authStatus,"Signing in...");
  const email=document.getElementById("memoryEmail").value.trim().toLowerCase();
@@ -180,5 +207,5 @@ document.getElementById("prevBtn").addEventListener("click",()=>openLightbox((cu
 document.getElementById("closeBtn").addEventListener("click",closeLightbox);
 lightbox.addEventListener("click",e=>{if(e.target===lightbox)closeLightbox();});
 document.addEventListener("keydown",e=>{if(!lightbox.classList.contains("active"))return;if(e.key==="Escape")closeLightbox();if(e.key==="ArrowRight")openLightbox((current+1)%allPhotos.length);if(e.key==="ArrowLeft")openLightbox((current-1+allPhotos.length)%allPhotos.length);});
-loadMemories().catch(error => { console.error(error); if (gallery) gallery.setAttribute("aria-busy", "false"); const s=document.getElementById("memoryLoadStatus"); if(s) s.textContent="Could not connect to shared memories. Please refresh and try again."; });
+// Shared uploads are loaded only after Supabase restores an approved login session.
 })();
