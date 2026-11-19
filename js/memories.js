@@ -112,7 +112,7 @@ async function loadMemories() {
     if(!notice){notice=document.createElement("p");notice.id="memoryLoadStatus";notice.className="memory-status";gallery?.before(notice);}
     notice.textContent="Shared memories could not be loaded right now. Please refresh and try again.";
     if (gallery) gallery.setAttribute("aria-busy", "false");
-    return;
+    return false;
   }
   const oldNotice=document.getElementById("memoryLoadStatus"); if(oldNotice) oldNotice.remove();
   const uploaded=(data||[]).map(row=>({
@@ -140,7 +140,8 @@ async function refreshForSession(session) {
   if (loadedUserId === userId) return;
   loadedUserId = userId;
   try {
-    await loadMemories();
+    const loaded = await loadMemories();
+    if (!loaded) loadedUserId = "";
   } catch (error) {
     loadedUserId = "";
     console.error("Could not refresh shared memories:", error);
