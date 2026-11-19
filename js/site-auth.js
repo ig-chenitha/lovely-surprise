@@ -97,16 +97,26 @@ $("siteAuthForm").addEventListener("submit",async e=>{
  if(!ALLOWED.includes(email)){status("Only Chenitha and Raveena's approved email accounts can access this website.");return;}
  if(!client){status("Connecting securely... Please try again in a moment.");return;}
  $("siteAuthSubmit").disabled=true;status(mode==="signup"?"Creating your profile...":"Signing in...");
- let result;
- if(mode==="signup"){
-  const display_name=$("siteDisplayName").value.trim();
-  if(!display_name){status("Please enter your name.");$("siteAuthSubmit").disabled=false;return;}
-  result=await client.auth.signUp({email,password,options:{data:{display_name}}});
-  if(!result.error&&!result.data.session){status("Account created! Check your email to confirm, then come back and log in.");}
- }else{result=await client.auth.signInWithPassword({email,password});}
- $("siteAuthSubmit").disabled=false;
- if(result.error){status(result.error.message);return;}
- if(result.data.session){showProfile(result.data.user);}
+ try {
+  let result;
+  if(mode==="signup"){
+   const display_name=$("siteDisplayName").value.trim();
+   if(!display_name){status("Please enter your name.");return;}
+   result=await client.auth.signUp({email,password,options:{data:{display_name}}});
+   if(!result.error&&!result.data.session){
+    status("Account created! Check your email to confirm, then come back and log in.");
+    return;
+   }
+  }else{
+   result=await client.auth.signInWithPassword({email,password});
+  }
+  if(result.error){status(result.error.message);return;}
+  if(result.data.session){showProfile(result.data.user);}
+ }catch(error){
+  status(error?.message || "The login service could not be reached. Please check your connection and try again.");
+ }finally{
+  $("siteAuthSubmit").disabled=false;
+ }
 });
 
 $("siteChooseAvatar").addEventListener("click",()=>$("siteAvatarFile").click());
@@ -176,6 +186,8 @@ function startAuth(){
    if(isHomePage && !cameFromHomeClick) showForm();
    else enter(data.session.user,false);
   } else if(data.session)client.auth.signOut();
+ }).catch(error=>{
+  status(error?.message || "Could not restore your login session. Please refresh and try again.");
  });
 }
 if(client){startAuth();}
