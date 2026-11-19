@@ -18,10 +18,39 @@ function build(){
  if(!window.supabase){root.querySelector("#lcStatus").textContent="Chat service unavailable.";return;}
  const db=window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY),list=root.querySelector("#lcMessages"),status=root.querySelector("#lcStatus"),form=root.querySelector("#lcForm"),input=root.querySelector("#lcInput"),send=root.querySelector("#lcSend");let me=null,channel=null;const seen=new Set();
  function append(row){if(seen.has(row.id))return;seen.add(row.id);list.querySelector(".lc-empty")?.remove();const mine=row.sender_email.toLowerCase()===me.email.toLowerCase(),b=document.createElement("article"),who=document.createElement("span"),p=document.createElement("p"),t=document.createElement("time");b.className="lc-bubble "+(mine?"mine":"theirs");who.className="lc-sender";who.textContent=mine?"You":name(row.sender_email);p.textContent=row.message;t.textContent=new Date(row.created_at).toLocaleTimeString([],{hour:"numeric",minute:"2-digit"});b.append(who,p,t);list.append(b);list.scrollTop=list.scrollHeight;}
- async function init(){const {data:{session},error}=await db.auth.getSession();if(error||!session||!ALLOWED.includes((session.user.email||"").toLowerCase())){status.textContent="Please sign in to use our private chat.";return;}me=session.user;const {data,error:e}=await db.from("lovely_chat_messages").select("*").order("created_at",{ascending:true}).limit(200);if(e){status.textContent="Couldn't load messages. Please try again.";console.error(e);return;}(data||[]).forEach(append);status.textContent="Private chat connected";channel=db.channel("lovely-couple-chat-widget").on("postgres_changes",{event:"INSERT",schema:"public",table:"lovely_chat_messages"},payload=>append(payload.new)).subscribe(s=>{if(s==="SUBSCRIBED")status.textContent="Live • just the two of us";});}
+ let connectedUserId=null,connecting=false;
+ async function connectSession(session){
+  const email=(session?.user?.email||"").toLowerCase();
+  if(!session||!ALLOWED.includes(email)){
+   me=null;connectedUserId=null;
+   if(channel){await db.removeChannel(channel);channel=null;}
+   status.textContent="Please sign in to use our private chat.";
+   list.innerHTML='<p class="lc-empty">Sign in to see our conversation. ♡</p>';
+   seen.clear();
+   return;
+  }
+  if(connectedUserId===session.user.id||connecting)return;
+  connecting=true;
+  try{
+   me=session.user;connectedUserId=session.user.id;
+   status.textContent="Loading our conversation…";
+   const {data,error:e}=await db.from("lovely_chat_messages").select("*").order("created_at",{ascending:true}).limit(200);
+   if(e){connectedUserId=null;status.textContent="Couldn't load messages. Please try again.";console.error(e);return;}
+   list.innerHTML="";seen.clear();(data||[]).forEach(append);
+   status.textContent="Private chat connected";
+   if(channel)await db.removeChannel(channel);
+   channel=db.channel("lovely-couple-chat-widget").on("postgres_changes",{event:"INSERT",schema:"public",table:"lovely_chat_messages"},payload=>{if(me)append(payload.new);}).subscribe(s=>{if(s==="SUBSCRIBED")status.textContent="Live • just the two of us";});
+  }catch(error){connectedUserId=null;status.textContent="Chat connection failed. Please try again.";console.error(error);}
+  finally{connecting=false;}
+ }
+ db.auth.onAuthStateChange((_event,session)=>{connectSession(session);});
+ db.auth.getSession().then(({data,error})=>{
+  if(error){status.textContent="Could not check your sign-in. Please refresh.";console.error(error);return;}
+  connectSession(data.session);
+ }).catch(error=>{status.textContent="Chat connection failed. Please refresh.";console.error(error);});
  form.addEventListener("submit",async e=>{e.preventDefault();const message=input.value.trim();if(!message||!me)return;send.disabled=true;const {error}=await db.from("lovely_chat_messages").insert({sender_email:me.email,sender_name:name(me.email),message});send.disabled=false;if(error){const detail=[error.message,error.details,error.hint,error.code].filter(Boolean).join(" • ");status.textContent="Send failed: "+(detail||"Unknown database error");console.error("Lovely chat send error:",error);return;}input.value="";input.focus();});
  input.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.shiftKey){e.preventDefault();form.requestSubmit();}});
- init().catch(e=>{console.error(e);status.textContent="Chat could not connect.";});window.addEventListener("beforeunload",()=>{if(channel)db.removeChannel(channel);});
+ window.addEventListener("beforeunload",()=>{if(channel)db.removeChannel(channel);});
 }
 if(document.readyState==="loading")document.addEventListener("DOMContentLoaded",build);else build();
 })();
